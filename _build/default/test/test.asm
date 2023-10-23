@@ -17,19 +17,19 @@ main:
 	addi $sp, $sp, -8
 	li $t6, 2
 	subi $sp, $sp, 4
-	sw $t0, 0($sp)
+	sw $t6, 0($sp)
 	li $t6, 1
 	subi $sp, $sp, 4
-	sw $t0, 0($sp)
+	sw $t6, 0($sp)
 	jal point_constructor
 	addi $sp, $sp, 8
 	sw $t0, -8($fp)
 	li $t6, 48
 	subi $sp, $sp, 4
-	sw $t0, 0($sp)
+	sw $t6, 0($sp)
 	lw $t6, -8($fp)
 	subi $sp, $sp, 4
-	sw $t0, 0($sp)
+	sw $t6, 0($sp)
 	li $t0, 8
 	lw $t1, -8($fp)
 	lw $t1, 0($t1)

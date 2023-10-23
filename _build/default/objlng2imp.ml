@@ -35,35 +35,10 @@ let translate_program (p: Objlng.typ Objlng.program) =
                                                              
                                         | _ -> failwith "method call not on function"
                                        )
-
-
-
-(*                                       
-      let c = tr_expression e1 in (* c = TClass cla_name*)
-      let args = c :: (List.map tr_expression args) in
-      let f = Imp.Binop (Add, c, Cst (get_method_offset o.annot s)) in
-      Imp.DCall (Deref f, args)
-*)
-
-
-
-                                       (*
-    | New (s, constructor) -> Seq (Expr (Alloc (Binop (Mul, Cst ( 1 + (List.length (List.find (fun (x : 'a Objlng.class_def) -> x.name = s) p.classes).fields)), Cst 4))) :: (List.map (fun x -> Imp.Expr (tr_expr x)) constructor))
-    | New (s, args) -> let cla_def = List.find (fun (x : 'a Objlng.class_def) -> x.name = s) p.classes in
-                        Seq (Expr (Alloc (Binop (Mul, Cst ( 1 + (List.length (cla_def).fields)), Cst 4))) :: 
-                        ()
-                        )
-    *)
     | New (class_name, args) -> Call (class_name^"_constructor", List.map tr_expr args)
     | NewTab (typ, e) -> Alloc (Binop (Mul, tr_expr e, Cst 4))
     | Read mem -> Deref (tr_mem mem)
     | This -> Var "_this"
-    (*
-    | This -> (match te.annot with
-               | TClass cla -> Deref (List.find (fun (x :'a Objlng.class_def) -> x.name = cla) p.classes)
-               | _ -> failwith "error this"
-              )
-              *)
   and tr_mem = function
     | Arr (e1, e2) -> Imp.array_offset (tr_expr e1) (tr_expr e2)
     | Atr (e1, s) -> let t_e1 = match e1.annot with
@@ -78,7 +53,6 @@ let translate_program (p: Objlng.typ Objlng.program) =
  
   in
 
-  (* translation of instructions *)
   let rec tr_seq s = List.map tr_instr s
   and tr_instr: Objlng.typ Objlng.instruction -> Imp.instruction = function
     | Putchar e     -> Putchar(tr_expr e)
@@ -88,7 +62,6 @@ let translate_program (p: Objlng.typ Objlng.program) =
     | Return  e -> Return (tr_expr e)
     | Expr    e -> Expr (tr_expr e)
     | Write   (mem, e) -> Write (tr_mem mem, tr_expr e)
-    (* Faire un tr_mem dans tr_expr*)
   in
 
   let tr_class_methods cla =
@@ -108,22 +81,7 @@ let translate_program (p: Objlng.typ Objlng.program) =
         code = code; }
     in
     List.map tr_method cla.methods
-      (*
-    List.fold_left (fun f m -> tr_method m :: f) f cla.methods
-    *)
   in
-  
-
-  (* translation of function definitions *)
-  let methods = List.map (fun (c_def : 'a Objlng.class_def) -> 
-                          List.map (fun (f_def: 'a Objlng.function_def) -> 
-                                    {f_def with name = c_def.name ^ "_" ^ f_def.name}) c_def.methods) 
-                p.classes 
-  in
-  (*
-  let p = {p with functions = p.functions @ List.flatten(methods)} in
-  *)
-
 
   let tr_fdef (fdef: Objlng.typ Objlng.function_def) =
     { Imp.name = fdef.name; 
