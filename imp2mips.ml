@@ -16,12 +16,12 @@ let tr_function fdef =
   List.iteri (fun k id -> Hashtbl.add env id (-4*(k+2))) fdef.locals;
   
   let rec tr_expr_stack = function
-    | Cst(n)  -> li t0 n
-    | Bool(b) -> if b then li t0 1 else li t0 0
+    | Cst(n)  -> li t6 n
+    | Bool(b) -> if b then li t6 1 else li t6 0
     | Var(id) -> begin
         match Hashtbl.find_opt env id with
-        | Some offset -> lw t0 offset fp
-        | None -> la t0 id @@ lw t0 0 t0
+        | Some offset -> lw t6 offset fp
+        | None -> la t6 id @@ lw t6 0 t6
       end
                
     | Binop(bop, e1, e2) ->
@@ -31,14 +31,14 @@ let tr_function fdef =
          | Lt  -> slt
        in
        tr_expr_stack e2
-       @@ push t0
+       @@ push t6
        @@ tr_expr_stack e1
-       @@ pop t1
-       @@ op t0 t0 t1      
+       @@ pop t7
+       @@ op t6 t6 t7      
     | Call(f, params) ->
        let params_code =
          List.fold_right
-           (fun e code -> code @@ tr_expr_stack e @@ push t0)
+           (fun e code -> code @@ tr_expr_stack e @@ push t6)
            params nop
        in
        params_code
@@ -47,9 +47,9 @@ let tr_function fdef =
 
   and tr_expr i e = 
    let regs = [|t0; t1; t2; t3; t4; t5; t6; t7|] in
-   if i > 6 then 
+   if i > 5 then 
       tr_expr_stack e
-      @@ move regs.(i) t0
+      @@ move regs.(i) t6
    else
    match e with
     | Cst(n)  -> li regs.(i) n
@@ -60,9 +60,9 @@ let tr_function fdef =
         | None -> la regs.(i) id @@ lw regs.(i) 0 regs.(i)
       end
     | Binop(bop, e1, e2) ->
-      if i > 6 then 
+      if i > 4 then 
          tr_expr_stack e
-         @@ move regs.(i) t0
+         @@ move regs.(i) t6
       else
        let op = match bop with
          | Add -> add
@@ -97,22 +97,22 @@ let tr_function fdef =
 
   and tr_instr = function
     | Putchar(e) ->
-       tr_expr 2 e
-       @@ move a0 t2
+       tr_expr 0 e
+       @@ move a0 t0
        @@ li v0 11
        @@ syscall
     | Set(id, e) ->
        let set_code = match Hashtbl.find_opt env id with
-         | Some offset -> sw t2 offset fp
-         | None -> la t1 id @@ sw t2 0 t1
+         | Some offset -> sw t0 offset fp
+         | None -> la t1 id @@ sw t0 0 t1
        in
-       tr_expr 2 e @@ set_code
+       tr_expr 0 e @@ set_code
     | If(c, s1, s2) ->
        let then_label = new_label()
        and end_label = new_label()
        in
-       tr_expr 2 c
-       @@ bnez t2 then_label
+       tr_expr 0 c
+       @@ bnez t0 then_label
        @@ tr_seq s2
        @@ b end_label
        @@ label then_label
@@ -127,17 +127,17 @@ let tr_function fdef =
        @@ label code_label
        @@ tr_seq s
        @@ label test_label
-       @@ tr_expr 2 c
-       @@ bnez t2 code_label
+       @@ tr_expr 0 c
+       @@ bnez t0 code_label
     | Return(e) ->
-       tr_expr 2 e
+       tr_expr 0 e
        @@ addi sp fp (-4)
        @@ pop ra
        @@ pop fp
        @@ jr ra
 
     | Expr(e) ->
-       tr_expr 2 e
+       tr_expr 0 e
   in
 
   push fp
