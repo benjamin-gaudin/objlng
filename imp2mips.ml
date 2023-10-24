@@ -70,9 +70,6 @@ let tr_function fdef =
        @@ tr_expr_stack e1
        @@ jalr t0
        @@ addi sp sp (4 * List.length params)
-    | Seq s -> match s with
-       | [] -> nop
-       | h::t -> tr_instr h @@ tr_expr_stack (Seq t)
 
   and tr_expr i e = 
    let regs = [|t0; t1; t2; t3; t4; t5; t6; t7|] in
@@ -132,10 +129,6 @@ let tr_function fdef =
        @@ tr_expr i e1
        @@ jalr regs.(i)
        @@ addi sp sp (4 * List.length params)
-    | Seq s -> if i > 5 then tr_expr_stack e else
-      match s with
-       | [] -> nop
-       | h::t -> tr_instr h @@ tr_expr (i+1) (Seq t)
 
   and tr_seq = function
     | []   -> nop
@@ -189,6 +182,9 @@ let tr_function fdef =
        @@ tr_expr 0 e2  (* t0: value to be written *)
        @@ pop t1
        @@ sw t0 0(t1)
+    | Seq s -> match s with
+       | [] -> nop
+       | h::t -> tr_instr h @@ tr_instr (Seq t)
 
   in
 

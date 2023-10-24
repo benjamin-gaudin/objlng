@@ -11,9 +11,8 @@ type expression =
 
   | Addr of string
   | DCall of expression * expression list
-  | Seq of sequence
 
-and instruction =
+type instruction =
   | Putchar of expression
   | Set     of string * expression
   | If      of expression * sequence * sequence
@@ -21,6 +20,7 @@ and instruction =
   | Return  of expression
   | Expr    of expression
   | Write   of expression * expression (*   *e1 = e2;   *)
+  | Seq of sequence
 and sequence = instruction list
 
 let i = While(Binop(Lt, Var "c", Cst 58),
