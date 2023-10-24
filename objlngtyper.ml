@@ -50,7 +50,7 @@ let type_program (p: unit program): typ program =
                                                         mk_expr method_def.return (MCall (type_expr e, method_name, t_args))
                                         | _ -> failwith "method call not on function"
                                        )
-      | New (s, constructor) -> mk_expr (TClass s) (New (s, List.map type_expr constructor))
+      | New (s, args) -> mk_expr (TClass s) (New (s, List.map type_expr args))
       | NewTab (typ, e) -> mk_expr (TArray typ) (NewTab (typ, type_expr e))
       | Read(Arr (e1, e2)) -> let t_e1 = match (type_expr e1).annot with
                                          | TArray t -> t
@@ -63,7 +63,6 @@ let type_program (p: unit program): typ program =
                                   in
                                   mk_expr (snd (List.find (fun x -> fst x = field) (Env.find name cenv).fields))
                                           (Read(Atr(type_expr e1, field)))
-      (* TODO *)
       | This -> mk_expr (Env.find "_this" tenv) This 
     in
 
@@ -89,9 +88,11 @@ let type_program (p: unit program): typ program =
     in
     { fdef with code = type_seq fdef.code }
   in
-  let add_this (cla:string) (f:'a function_def) = if f.name = "constructor" then
+  let add_this (cla:string) (f:'a function_def) = (*
+                                                  if f.name = "constructor" then
                                                     {f with locals = ("_this", TClass cla) :: f.locals}  
                                                   else
+                                                    *)
                                                     {f with params = ("_this", TClass cla) :: f.params}
 
   in

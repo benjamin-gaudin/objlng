@@ -15,6 +15,10 @@ let rec find_index f lst =
 (* main translation function *)
 let translate_program (p: Objlng.typ Objlng.program) =
 
+  let find_class_def name =
+    List.find (fun cla_def -> String.equal cla_def.name name) p.classes
+  in
+
   (* translation of an expression *)
   let rec tr_expr (te: Objlng.typ Objlng.expression): Imp.expression = match te.expr with
     | Cst n  -> Cst n
@@ -35,7 +39,7 @@ let translate_program (p: Objlng.typ Objlng.program) =
                                                              
                                         | _ -> failwith "method call not on function"
                                        )
-    | New (class_name, args) -> Call (class_name^"_constructor", List.map tr_expr args)
+(*    | New (class_name, args) -> Call (class_name^"_constructor", List.map tr_expr args) *)
     | NewTab (typ, e) -> Alloc (Binop (Mul, tr_expr e, Cst 4))
     | Read mem -> Deref (tr_mem mem)
     | This -> Var "_this"
@@ -56,6 +60,16 @@ let translate_program (p: Objlng.typ Objlng.program) =
   let rec tr_seq s = List.map tr_instr s
   and tr_instr: Objlng.typ Objlng.instruction -> Imp.instruction = function
     | Putchar e     -> Putchar(tr_expr e)
+    | Set     (s, { annot; expr = (New (class_name, args))}) -> 
+        Seq 
+        [
+        Set (s, (Alloc (Cst(4 * (1 + List.length (find_class_def class_name).fields)))));
+        Write (Var s, Addr(class_name ^ "_" ^ "descr"));
+        (*
+        Set (s, Var "_this");
+        *)
+        Expr (Call (class_name ^ "_constructor", Var s :: List.map tr_expr args));
+        ]  
     | Set     (s, e)-> Set (s, tr_expr e)
     | If      (e, seq1, seq2) -> If (tr_expr e, tr_seq seq1, tr_seq seq2)
     | While   (e, seq) -> While (tr_expr e, tr_seq seq)
@@ -66,14 +80,16 @@ let translate_program (p: Objlng.typ Objlng.program) =
 
   let tr_class_methods cla =
     let tr_method (f : 'a function_def) =
-      let code = 
+      let code = tr_seq f.code
+      (*
         if f.name = "constructor" then 
           let nb_of_fields = List.length cla.fields in
-            Imp.Set("_this", Alloc (Cst (4 * (nb_of_fields + 1)) ))
+            Imp.Set("_this", Alloc (Cst (4 * (nb_of_fields + 1))))
             :: Write(Var "_this", Addr(cla.name ^ "_" ^ "descr"))
             :: tr_seq f.code @ [Return (Var "_this")]
         else
           tr_seq f.code
+      *)
       in
       { name = cla.name ^ "_" ^ f.name;
         params = List.map fst f.params;
@@ -94,10 +110,11 @@ let translate_program (p: Objlng.typ Objlng.program) =
   let functions = List.map tr_fdef p.functions in
   let functions2 = List.flatten (List.map tr_class_methods p.classes) in
   
-  let class_descrs = List.map (fun (cla_def :'a Objlng.class_def) -> { descr_name = cla_def.name ^ "_descr";
-                                                                     methods = List.map (fun (methods : 'a Objlng.function_def) -> cla_def.name ^ "_" ^ methods.name) cla_def.methods;
-                                                                     parent = None
-                                                                    }) p.classes
+  let class_descrs = List.map (fun (cla_def :'a Objlng.class_def) -> 
+    { descr_name = cla_def.name ^ "_descr";
+     methods = List.map (fun (methods : 'a Objlng.function_def) -> cla_def.name ^ "_" ^ methods.name) cla_def.methods;
+     parent = None
+    }) p.classes
   in
   let () = List.iter (fun x -> print_endline x.descr_name) class_descrs; in
 

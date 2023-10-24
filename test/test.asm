@@ -15,15 +15,30 @@ main:
 	sw $ra, 0($sp)
 	addi $fp, $sp, 4
 	addi $sp, $sp, -8
+	li $t0, 8
+	move $a0, $t0
+	li $v0, 9
+	syscall
+	move $t0, $v0
+	sw $t0, -8($fp)
+	lw $t0, -8($fp)
+	subi $sp, $sp, 4
+	sw $t0, 0($sp)
+	la $t0, point_descr
+	lw $t1, 0($sp)
+	addi $sp, $sp, 4
+	sw $t0, 0($t1)
 	li $t6, 2
 	subi $sp, $sp, 4
 	sw $t6, 0($sp)
 	li $t6, 1
 	subi $sp, $sp, 4
 	sw $t6, 0($sp)
+	lw $t6, -8($fp)
+	subi $sp, $sp, 4
+	sw $t6, 0($sp)
 	jal point_constructor
-	addi $sp, $sp, 8
-	sw $t0, -8($fp)
+	addi $sp, $sp, 12
 	li $t6, 48
 	subi $sp, $sp, 4
 	sw $t6, 0($sp)
@@ -55,35 +70,11 @@ point_constructor:
 	subi $sp, $sp, 4
 	sw $ra, 0($sp)
 	addi $fp, $sp, 4
-	addi $sp, $sp, -4
-	li $t0, 12
-	move $a0, $t0
-	li $v0, 9
-	syscall
-	move $t0, $v0
-	sw $t0, -8($fp)
-	lw $t0, -8($fp)
-	subi $sp, $sp, 4
-	sw $t0, 0($sp)
-	la $t0, point_descr
-	lw $t1, 0($sp)
-	addi $sp, $sp, 4
-	sw $t0, 0($t1)
+	addi $sp, $sp, 0
 	li $t0, 1
 	li $t1, 4
 	mul $t0, $t1, $t0
-	lw $t1, -8($fp)
-	add $t0, $t1, $t0
-	subi $sp, $sp, 4
-	sw $t0, 0($sp)
-	lw $t0, 4($fp)
-	lw $t1, 0($sp)
-	addi $sp, $sp, 4
-	sw $t0, 0($t1)
-	li $t0, 2
-	li $t1, 4
-	mul $t0, $t1, $t0
-	lw $t1, -8($fp)
+	lw $t1, 4($fp)
 	add $t0, $t1, $t0
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
@@ -91,13 +82,17 @@ point_constructor:
 	lw $t1, 0($sp)
 	addi $sp, $sp, 4
 	sw $t0, 0($t1)
-	lw $t0, -8($fp)
-	addi $sp, $fp, -4
-	lw $ra, 0($sp)
+	li $t0, 2
+	li $t1, 4
+	mul $t0, $t1, $t0
+	lw $t1, 4($fp)
+	add $t0, $t1, $t0
+	subi $sp, $sp, 4
+	sw $t0, 0($sp)
+	lw $t0, 12($fp)
+	lw $t1, 0($sp)
 	addi $sp, $sp, 4
-	lw $fp, 0($sp)
-	addi $sp, $sp, 4
-	jr $ra
+	sw $t0, 0($t1)
 	li $t0, 0
 	addi $sp, $fp, -4
 	lw $ra, 0($sp)

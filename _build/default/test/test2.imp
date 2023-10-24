@@ -1,0 +1,57 @@
+
+function main() {
+  var p;
+  var c;
+  var b;
+  var r_1;
+  var r_2;
+  var c1;
+  var c2;
+  
+  p = alloc(8);
+  *p = *point_descr;
+  point_constructor(p, 0, 2);
+  c = *(*(*p + 8))(p, 48);
+  c1 = alloc(8);
+  *c1 = *cercle_descr;
+  cercle_constructor(c1, p, 3);
+  c2 = alloc(8);
+  *c2 = *cercle_descr;
+  cercle_constructor(c2, p, 4);
+  r_1 = *(*(*c1 + 8))(c1);
+  r_2 = *(*(*c2 + 8))(c2);
+  putchar(c);
+  putchar(r_1);
+  putchar(r_2);
+  *(p + (4 * 1)) = 0;
+  c = *(*(*p + 8))(p, 48);
+  r_1 = *(*(*c1 + 8))(c1);
+  r_2 = *(*(*c2 + 8))(c2);
+  putchar(c);
+  putchar(r_1);
+  putchar(r_2);
+}
+
+function point_constructor(_this, x, y) {
+  
+  *(_this + (4 * 1)) = x;
+  *(_this + (4 * 2)) = y;
+}
+
+function point_sum(_this, x) {
+  
+  return(((x + *(_this + (4 * 1))) + *(_this + (4 * 2))));
+}
+
+function cercle_constructor(_this, centre, r) {
+  
+  *(_this + (4 * 1)) = centre;
+  *(_this + (4 * 2)) = r;
+}
+
+function cercle_sum(_this) {
+  
+  return(((*(*(_this + (4 * 1)) + (4 * 1)) + *(_this + (4 * 2))) + 48));
+}
+
+

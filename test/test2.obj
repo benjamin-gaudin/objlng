@@ -1,0 +1,51 @@
+class point {
+  attribute int x;
+  attribute int y;
+  method void constructor(int x, int y) {
+    this.x = x;
+    this.y = y;
+  }
+  method int sum(int x) {
+    return (x+this.x+this.y);
+  }
+}
+
+class cercle {
+  attribute point centre;
+  attribute int r;
+  method void constructor(point centre, int r) {
+    this.centre = centre;
+    this.r = r;
+  }
+  method int sum() {
+    return (this.centre.x + this.r + 48);
+  }
+}
+
+function void main() {
+  var point p;
+  var int c;
+  var point b;
+  var int r_1;
+  var int r_2;
+  var cercle c1;
+  var cercle c2;
+  p = new point(1, 2);
+  c = p.sum(48);
+  c1 = new cercle(p, 3);
+  c2 = new cercle(p, 4);
+  r_1 = c1.sum();
+  r_2 = c2.sum();
+  putchar(c);
+  putchar(r_1);
+  putchar(r_2);
+  p.x = 0;
+  c = p.sum(48);
+  r_1 = c1.sum();
+  r_2 = c2.sum();
+  putchar(c);
+  putchar(r_1);
+  putchar(r_2);
+}
+
+// prints '3'

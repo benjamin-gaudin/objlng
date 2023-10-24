@@ -3,7 +3,7 @@
 # Shared cache: disabled
 # Workspace root: /home/john/Documents/Compil/git
 # Auto-detected concurrency: 4
-$ /home/john/.opam/default/bin/ocamlc.opt -config > /tmp/dune_512760_output
+$ /home/john/.opam/default/bin/ocamlc.opt -config > /tmp/dune_423381_output
 # Dune context:
 #  { name = "default"
 #  ; kind = "default"
@@ -98,10 +98,36 @@ $ /home/john/.opam/default/bin/ocamlc.opt -config > /tmp/dune_512760_output
 #      }
 #  ; instrument_with = []
 #  }
-$ (cd _build/default && /home/john/.opam/default/bin/ocamldep.opt -modules -impl imppp.ml) > _build/default/.objlngc.eobjs/dune__exe__Imppp.impl.d
-$ (cd _build/default && /home/john/.opam/default/bin/ocamlc.opt -g -bin-annot -I .objlngc.eobjs/byte -no-alias-deps -opaque -open Dune__exe -o .objlngc.eobjs/byte/dune__exe__Imppp.cmo -c -impl imppp.ml)
-$ (cd _build/default && /home/john/.opam/default/bin/ocamlc.opt -g -bin-annot -I .objlngc.eobjs/byte -no-alias-deps -opaque -open Dune__exe -o .objlngc.eobjs/byte/dune__exe__Objlngc.cmo -c -impl objlngc.ml)
-$ (cd _build/default && /home/john/.opam/default/bin/ocamlopt.opt -g -I .objlngc.eobjs/byte -I .objlngc.eobjs/native -intf-suffix .ml -no-alias-deps -opaque -open Dune__exe -o .objlngc.eobjs/native/dune__exe__Objlngc.cmx -c -impl objlngc.ml)
-$ (cd _build/default && /home/john/.opam/default/bin/ocamlopt.opt -g -I .objlngc.eobjs/byte -I .objlngc.eobjs/native -intf-suffix .ml -no-alias-deps -opaque -open Dune__exe -o .objlngc.eobjs/native/dune__exe__Imppp.cmx -c -impl imppp.ml)
+$ (cd _build/default && /home/john/.opam/default/bin/ocamldep.opt -modules -impl objlng2imp.ml) > _build/default/.objlngc.eobjs/dune__exe__Objlng2imp.impl.d
+$ (cd _build/default && /home/john/.opam/default/bin/ocamlc.opt -g -bin-annot -I .objlngc.eobjs/byte -no-alias-deps -opaque -open Dune__exe -o .objlngc.eobjs/byte/dune__exe__Objlng2imp.cmo -c -impl objlng2imp.ml)
+> File "objlng2imp.ml", lines 23-45, characters 71-25:
+> 23 | .......................................................................match te.expr with
+> 24 |     | Cst n  -> Cst n
+> 25 |     | Bool b -> Bool b
+> 26 |     | Var x  -> Var x
+> 27 |     | Binop(op, e1, e2) -> Binop(tr_op op, tr_expr e1, tr_expr e2)
+> ...
+> 42 | (*    | New (class_name, args) -> Call (class_name^"_constructor", List.map tr_expr args) *)
+> 43 |     | NewTab (typ, e) -> Alloc (Binop (Mul, tr_expr e, Cst 4))
+> 44 |     | Read mem -> Deref (tr_mem mem)
+> 45 |     | This -> Var "_this"
+> Warning 8 [partial-match]: this pattern-matching is not exhaustive.
+> Here is an example of a case that is not matched:
+> New (_, _)
+$ (cd _build/default && /home/john/.opam/default/bin/ocamlopt.opt -g -I .objlngc.eobjs/byte -I .objlngc.eobjs/native -intf-suffix .ml -no-alias-deps -opaque -open Dune__exe -o .objlngc.eobjs/native/dune__exe__Objlng2imp.cmx -c -impl objlng2imp.ml)
+> File "objlng2imp.ml", lines 23-45, characters 71-25:
+> 23 | .......................................................................match te.expr with
+> 24 |     | Cst n  -> Cst n
+> 25 |     | Bool b -> Bool b
+> 26 |     | Var x  -> Var x
+> 27 |     | Binop(op, e1, e2) -> Binop(tr_op op, tr_expr e1, tr_expr e2)
+> ...
+> 42 | (*    | New (class_name, args) -> Call (class_name^"_constructor", List.map tr_expr args) *)
+> 43 |     | NewTab (typ, e) -> Alloc (Binop (Mul, tr_expr e, Cst 4))
+> 44 |     | Read mem -> Deref (tr_mem mem)
+> 45 |     | This -> Var "_this"
+> Warning 8 [partial-match]: this pattern-matching is not exhaustive.
+> Here is an example of a case that is not matched:
+> New (_, _)
 $ (cd _build/default && /home/john/.opam/default/bin/ocamlopt.opt -g -o objlngc.exe .objlngc.eobjs/native/dune__exe.cmx .objlngc.eobjs/native/dune__exe__Imp.cmx .objlngc.eobjs/native/dune__exe__Mips.cmx .objlngc.eobjs/native/dune__exe__Imp2mips.cmx .objlngc.eobjs/native/dune__exe__Imppp.cmx .objlngc.eobjs/native/dune__exe__Objlng.cmx .objlngc.eobjs/native/dune__exe__Objlng2imp.cmx .objlngc.eobjs/native/dune__exe__Objlngparser.cmx .objlngc.eobjs/native/dune__exe__Objlnglexer.cmx .objlngc.eobjs/native/dune__exe__Objlngtyper.cmx .objlngc.eobjs/native/dune__exe__Objlngc.cmx)
 # Promoting "_build/default/objlngc.exe" to "objlngc.exe"
