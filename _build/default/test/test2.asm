@@ -15,7 +15,7 @@ main:
 	sw $ra, 0($sp)
 	addi $fp, $sp, 4
 	addi $sp, $sp, -28
-	li $t0, 8
+	li $t0, 12
 	move $a0, $t0
 	li $v0, 9
 	syscall
@@ -31,7 +31,7 @@ main:
 	li $t6, 2
 	subi $sp, $sp, 4
 	sw $t6, 0($sp)
-	li $t6, 0
+	li $t6, 1
 	subi $sp, $sp, 4
 	sw $t6, 0($sp)
 	lw $t6, -8($fp)
@@ -53,7 +53,7 @@ main:
 	jalr $t0
 	addi $sp, $sp, 8
 	sw $t0, -12($fp)
-	li $t0, 8
+	li $t0, 12
 	move $a0, $t0
 	li $v0, 9
 	syscall
@@ -77,7 +77,7 @@ main:
 	sw $t6, 0($sp)
 	jal cercle_constructor
 	addi $sp, $sp, 12
-	li $t0, 8
+	li $t0, 12
 	move $a0, $t0
 	li $v0, 9
 	syscall

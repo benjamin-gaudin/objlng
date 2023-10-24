@@ -28,7 +28,7 @@ let tr_function fdef =
         | Some offset -> lw t6 offset fp
         | None -> la t6 id @@ lw t6 0 t6
       end
-               
+             
     | Binop(bop, e1, e2) ->
        let op = match bop with
          | Add -> add
@@ -144,7 +144,7 @@ let tr_function fdef =
     | Set(id, e) ->
        let set_code = match Hashtbl.find_opt env id with
          | Some offset -> sw t0 offset fp
-         | None -> print_endline (id ^ " not found !"); la t1 id @@ sw t0 0 t1
+         | None -> la t1 id @@ sw t0 0 t1
        in
        tr_expr 0 e @@ set_code
     | If(c, s1, s2) ->

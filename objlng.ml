@@ -61,6 +61,10 @@ type 'a class_def = {
   parent: string option;
 }
 
+let get_name e = match e.annot with
+            | TClass name -> name
+            | _ -> failwith "Not a class type"
+
 (* Program as in IMP + types + user-defined  *)
 type 'a program = {
   globals:   (string * typ) list;

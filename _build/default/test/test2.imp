@@ -8,14 +8,14 @@ function main() {
   var c1;
   var c2;
   
-  p = alloc(8);
+  p = alloc(12);
   *p = *point_descr;
-  point_constructor(p, 0, 2);
+  point_constructor(p, 1, 2);
   c = *(*(*p + 8))(p, 48);
-  c1 = alloc(8);
+  c1 = alloc(12);
   *c1 = *cercle_descr;
   cercle_constructor(c1, p, 3);
-  c2 = alloc(8);
+  c2 = alloc(12);
   *c2 = *cercle_descr;
   cercle_constructor(c2, p, 4);
   r_1 = *(*(*c1 + 8))(c1);

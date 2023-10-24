@@ -14,6 +14,10 @@ let check te t =
 let add2env l env =
   List.fold_left (fun env (x, t) -> Env.add x t env) env l
 
+let get_array_type e = match e.annot with
+  | TArray t -> t
+  | _ -> failwith "array type not found"
+
 (* main typing function *)
 let type_program (p: unit program): typ program =
 
@@ -42,27 +46,21 @@ let type_program (p: unit program): typ program =
                        List.iter2 (fun x y -> ignore(check y (snd x)) ) (Env.find f fenv).params args; 
                        mk_expr (Env.find f fenv).return (Call (f, args))
       | MCall (e, method_name, args) ->
-                                       (match (type_expr e).annot with
-                                        | TClass cla -> let cla_def = Env.find cla cenv in
-                                                        let method_def = List.find (fun (x :unit function_def) -> x.name = method_name) (cla_def.methods) in
-                                                        let t_args = List.map type_expr args in
-                                                        List.iter2 (fun x y -> ignore(check y (snd x)) ) method_def.params t_args; 
-                                                        mk_expr method_def.return (MCall (type_expr e, method_name, t_args))
-                                        | _ -> failwith "method call not on function"
-                                       )
+          let cla_name = get_name (type_expr e) in
+          let cla_def = Env.find cla_name cenv in
+          let method_def = List.find (fun (x : unit function_def) -> String.equal x.name method_name) (cla_def.methods) in
+          let t_args = List.map type_expr args in
+          List.iter2 (fun x y -> ignore(check y (snd x))) method_def.params t_args; 
+          mk_expr method_def.return (MCall (type_expr e, method_name, t_args))
       | New (s, args) -> mk_expr (TClass s) (New (s, List.map type_expr args))
       | NewTab (typ, e) -> mk_expr (TArray typ) (NewTab (typ, type_expr e))
-      | Read(Arr (e1, e2)) -> let t_e1 = match (type_expr e1).annot with
-                                         | TArray t -> t
-                                         | _ -> failwith "type error Arr"
-                              in
-                              mk_expr (t_e1) (Read(Arr(type_expr e1, check (type_expr e2) TInt)))
-      | Read(Atr (e1, field)) ->  let name = (match ((type_expr e1).annot) with
-                                                | TClass s -> s
-                                                | _ -> failwith "type error Atr")
-                                  in
-                                  mk_expr (snd (List.find (fun x -> fst x = field) (Env.find name cenv).fields))
-                                          (Read(Atr(type_expr e1, field)))
+      | Read(Arr (e1, e2)) -> 
+          let t_e1 = get_array_type(type_expr e1) in
+          mk_expr (t_e1) (Read(Arr(type_expr e1, check (type_expr e2) TInt)))
+      | Read(Atr (e1, field)) ->  
+          let cla_name = get_name (type_expr e1) in                        
+          mk_expr (snd (List.find (fun x -> fst x = field) (Env.find cla_name cenv).fields))
+                  (Read(Atr(type_expr e1, field)))
       | This -> mk_expr (Env.find "_this" tenv) This 
     in
 
@@ -75,26 +73,18 @@ let type_program (p: unit program): typ program =
       | While   (e, seq) -> While (check (type_expr e) TBool, type_seq seq)
       | Return  e -> Return (type_expr e)
       | Expr    e -> Expr (type_expr e)
-      | Write (Arr (e1, e2), e) -> (match (type_expr e1).annot with
-                                    | TArray t_e1 when t_e1 = (type_expr e).annot ->
-                                        Write (Arr(type_expr e1, check (type_expr e2) TInt), type_expr e)
-                                    | _ -> failwith "type error instr Arr"
-                                   )
-      | Write (Atr (e1, field), e) -> (match (type_expr e1).annot with 
-                                        | TClass cla when (snd (List.find (fun x -> fst x = field) (Env.find cla cenv).fields)) = (type_expr e).annot -> 
-                                           Write (Atr (type_expr e1, field), type_expr e)
-                                        | _ -> failwith "type error intr Atr"
-                                      )
+      | Write (Arr (e1, e2), e) -> 
+          let t_e1 =  get_array_type (type_expr e1) in
+          if t_e1 <> (type_expr e).annot then failwith "type error"
+          else Write (Arr(type_expr e1, check (type_expr e2) TInt), type_expr e)
+      | Write (Atr (e1, field), e) -> 
+          let cla_name = get_name (type_expr e1) in
+          if (snd (List.find (fun x -> fst x = field) (Env.find cla_name cenv).fields)) <> (type_expr e).annot 
+          then failwith "type error"
+          else Write (Atr (type_expr e1, field), type_expr e)
     in
     { fdef with code = type_seq fdef.code }
   in
-  let add_this (cla:string) (f:'a function_def) = (*
-                                                  if f.name = "constructor" then
-                                                    {f with locals = ("_this", TClass cla) :: f.locals}  
-                                                  else
-                                                    *)
-                                                    {f with params = ("_this", TClass cla) :: f.params}
-
-  in
+  let add_this (cla:string) (f:'a function_def) = {f with params = ("_this", TClass cla) :: f.params}in
   let classes = List.map (fun cla -> {cla with methods = List.map type_fdef (List.map (add_this cla.name) cla.methods)}) p.classes in
   { p with functions = List.map type_fdef p.functions ; classes = classes }

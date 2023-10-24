@@ -11,6 +11,12 @@ let rec find_index f lst =
   | [] -> -1
   | h :: t -> if  f h = true then 0 else 1 + find_index f t
 
+let find_index_method method_name method_list =
+  match find_index (fun (x : 'a function_def) -> String.equal method_name x.name) method_list with
+  | -1 -> failwith "method does not exist"
+  | n -> n
+
+let imp_add x y = Binop (Add, x, y)
 
 (* main translation function *)
 let translate_program (p: Objlng.typ Objlng.program) =
@@ -26,34 +32,25 @@ let translate_program (p: Objlng.typ Objlng.program) =
     | Var x  -> Var x
     | Binop(op, e1, e2) -> Binop(tr_op op, tr_expr e1, tr_expr e2)
     | Call (f,e) -> Call (f, List.map tr_expr e)
-    | MCall (e1, method_name, args) -> 
-                                       (match e1.annot with
-                                        | TClass cla_name -> let cla_def = List.find (fun (x : 'a Objlng.class_def) -> x.name = cla_name) p.classes in
-                                                             let index_method = (match find_index (fun (x : 'a Objlng.function_def) -> x.name = method_name) cla_def.methods with
-                                                                                | -1 -> failwith "method does not exist"
-                                                                                | n -> n
-                                                                                )
-                                                             in 
-                                                             DCall ((Deref (Binop (Add, Deref (tr_expr e1), Cst (4 * (index_method + 1))))), (List.map tr_expr (e1 :: args)))
-                                                             
-                                                             
-                                        | _ -> failwith "method call not on function"
-                                       )
-(*    | New (class_name, args) -> Call (class_name^"_constructor", List.map tr_expr args) *)
+    | MCall (e1, method_name, args) ->
+       let cla_name = get_name e1 in
+       let cla_def = find_class_def cla_name in
+       let index_method = find_index_method method_name cla_def.methods in
+       DCall ((Deref (Binop (Add, (Deref (tr_expr e1)), (Cst (4 * (index_method + 1)))))),
+              (List.map tr_expr (e1 :: args)))
     | NewTab (typ, e) -> Alloc (Binop (Mul, tr_expr e, Cst 4))
     | Read mem -> Deref (tr_mem mem)
     | This -> Var "_this"
+    | _ -> assert false
   and tr_mem = function
     | Arr (e1, e2) -> Imp.array_offset (tr_expr e1) (tr_expr e2)
-    | Atr (e1, s) -> let t_e1 = match e1.annot with
-                            | TClass name -> print_string "read conversion : "; print_endline name; name
-                            | _ -> failwith ""
-                     in
-                     let index = match (find_index (fun x -> fst x = s) (List.find (fun (x : 'a Objlng.class_def) -> x.name = t_e1) p.classes).fields) with
-                       | -1 -> failwith "field not recognized" 
-                       | n -> n
-                     in 
-                     Imp.array_offset (tr_expr e1) (Cst (index+1))
+    | Atr (e1, s) -> 
+        let cla_name = get_name e1 in
+        let index = match (find_index (fun x -> fst x = s) (find_class_def cla_name).fields) with
+           | -1 -> failwith "field not recognized" 
+           | n -> n
+         in 
+         Imp.array_offset (tr_expr e1) (Cst (index+1))
  
   in
 
@@ -65,9 +62,6 @@ let translate_program (p: Objlng.typ Objlng.program) =
         [
         Set (s, (Alloc (Cst(4 * (1 + List.length (find_class_def class_name).fields)))));
         Write (Var s, Addr(class_name ^ "_" ^ "descr"));
-        (*
-        Set (s, Var "_this");
-        *)
         Expr (Call (class_name ^ "_constructor", Var s :: List.map tr_expr args));
         ]  
     | Set     (s, e)-> Set (s, tr_expr e)
@@ -80,21 +74,10 @@ let translate_program (p: Objlng.typ Objlng.program) =
 
   let tr_class_methods cla =
     let tr_method (f : 'a function_def) =
-      let code = tr_seq f.code
-      (*
-        if f.name = "constructor" then 
-          let nb_of_fields = List.length cla.fields in
-            Imp.Set("_this", Alloc (Cst (4 * (nb_of_fields + 1))))
-            :: Write(Var "_this", Addr(cla.name ^ "_" ^ "descr"))
-            :: tr_seq f.code @ [Return (Var "_this")]
-        else
-          tr_seq f.code
-      *)
-      in
       { name = cla.name ^ "_" ^ f.name;
         params = List.map fst f.params;
         locals = List.map fst f.locals;
-        code = code; }
+        code = tr_seq f.code; }
     in
     List.map tr_method cla.methods
   in
@@ -112,11 +95,10 @@ let translate_program (p: Objlng.typ Objlng.program) =
   
   let class_descrs = List.map (fun (cla_def :'a Objlng.class_def) -> 
     { descr_name = cla_def.name ^ "_descr";
-     methods = List.map (fun (methods : 'a Objlng.function_def) -> cla_def.name ^ "_" ^ methods.name) cla_def.methods;
+     methods = List.map (fun (m : 'a function_def) -> cla_def.name ^"_"^ m.name) cla_def.methods;
      parent = None
     }) p.classes
   in
-  let () = List.iter (fun x -> print_endline x.descr_name) class_descrs; in
 
   { Imp.globals = List.map fst p.globals;
     class_descrs = class_descrs;
