@@ -1,0 +1,33 @@
+class point {
+  attribute int x;
+
+  method void constructor(int x) {
+    this.x = x;
+  }
+  
+}
+
+class cercle extends point {
+  attribute int y;
+  attribute int z;
+  
+  method void constructor(int x, int y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  method int get_x(){
+    this.x;
+  }
+
+}
+
+function void main() {
+  var point a1;
+  var circle b1;
+  
+  b1 = new circle(0,1);
+  putchar(b1.get_x());
+  
+}
+

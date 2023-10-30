@@ -1,0 +1,13 @@
+
+function main() {
+  var a1;
+  
+  
+}
+
+function point_constructor(_this, x) {
+  
+  *(_this + (4 * 1)) = x;
+}
+
+

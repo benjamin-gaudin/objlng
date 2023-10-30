@@ -1,0 +1,36 @@
+
+function main() {
+  var p;
+  var p2;
+  var c;
+  
+  p = alloc(16);
+  *p = *point_descr;
+  point_constructor(p, 1, 2);
+  p2 = alloc(16);
+  *p2 = *point_descr;
+  point_constructor(p2, 1, -1);
+  c = *(*(*p + 8))(p, 48);
+  putchar(*(*(*p2 + 12))(p2));
+  putchar(*(*(*p + 12))(p));
+  putchar(c);
+}
+
+function point_constructor(_this, x, y) {
+  
+  *(_this + (4 * 2)) = x;
+  *(_this + (4 * 3)) = y;
+  *(_this + (4 * 1)) = (x + y);
+}
+
+function point_sum(_this, x) {
+  
+  return(((x + *(_this + (4 * 2))) + *(_this + (4 * 3))));
+}
+
+function point_get_z(_this) {
+  
+  return((*(_this + (4 * 1)) + 97));
+}
+
+

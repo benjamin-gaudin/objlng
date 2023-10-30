@@ -1,0 +1,33 @@
+class circle {
+  attribute int z;
+
+}
+
+class point extends circle {
+  attribute int x;
+  attribute int y;
+  method void constructor(int x, int y) {
+    this.x = x;
+    this.y = y;
+    this.z = x + y;
+  }
+  method int sum(int x) {
+    return (x+this.x+this.y);
+  }
+
+  method int get_z() {
+    return this.z + 97;
+  }
+}
+
+function void main() {
+  var point p;
+  var point p2;
+  var int c;
+  p = new point(1, 2);
+  p2 = new point(5, -5);
+  c = p.sum(48);
+  putchar(p2.get_z());
+  putchar(p.get_z());
+  putchar(c);
+}

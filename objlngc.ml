@@ -6,7 +6,9 @@ let () =
   let lb = Lexing.from_channel c in
   let prog = Objlngparser.program Objlnglexer.token lb in
   close_in c;
+  print_endline "parser done";
   let tprog = Objlngtyper.type_program prog in
+  print_endline "typer done";
   let imp = Objlng2imp.translate_program tprog in
   let imp_output_file = (Filename.chop_suffix file ".obj") ^ ".imp" in
   let imp_out = open_out imp_output_file in
