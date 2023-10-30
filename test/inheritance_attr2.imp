@@ -3,6 +3,7 @@ function main() {
   var p;
   var p2;
   var c;
+  var carre;
   
   p = alloc(16);
   *p = *point_descr;
@@ -11,9 +12,18 @@ function main() {
   *p2 = *point_descr;
   point_constructor(p2, 5, -5);
   c = *(*(*p + 8))(p, 48);
-  putchar(*(*(*p2 + 12))(p2));
-  putchar(*(*(*p + 12))(p));
+  carre = alloc(16);
+  *carre = *carre_descr;
+  carre_constructor(carre, 26);
+  putchar(*(*(*p2 + 8))(p2));
+  putchar(*(*(*p + 8))(p));
+  putchar(*(*(*carre + 4))(carre));
   putchar(c);
+}
+
+function circle_get_z(_this) {
+  
+  return((*(_this + (4 * 1)) + 97));
 }
 
 function point_constructor(_this, x, y) {
@@ -28,9 +38,11 @@ function point_sum(_this, x) {
   return(((x + *(_this + (4 * 2))) + *(_this + (4 * 3))));
 }
 
-function point_get_z(_this) {
+function carre_constructor(_this, x) {
   
-  return((*(_this + (4 * 1)) + 97));
+  *(_this + (4 * 2)) = x;
+  *(_this + (4 * 3)) = x;
+  *(_this + (4 * 1)) = x;
 }
 
 

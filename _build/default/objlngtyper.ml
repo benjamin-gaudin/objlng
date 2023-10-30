@@ -21,6 +21,8 @@ let get_array_type e = match e.annot with
 (* main typing function *)
 let type_program (p: unit program): typ program =
 
+  List.iter (fun (x : 'a function_def) -> print_endline x.name) p.functions;
+
 
   let rec add_attr_inheritance classes classes_previous = 
 
@@ -48,6 +50,7 @@ let type_program (p: unit program): typ program =
                   add_attr_inheritance t (new_cla :: classes_previous) 
   in
   let classes = List.rev (add_attr_inheritance p.classes []) in
+  (*
   print_string "taille de la liste : ";
   print_int (List.length classes);
   print_endline "";
@@ -55,6 +58,13 @@ let type_program (p: unit program): typ program =
     List.iter (fun y -> print_endline (x.name ^ " : " ^ (fst y))) x.fields;
     if Option.is_some x.parent then print_endline (x.name ^ " parent : "^(Option.get x.parent)) )
   classes;
+  *)
+
+
+  let class_with_inheritance = List.filter (fun x -> Option.is_some x.parent) p.classes in
+  let super = Hashtbl.create (List.length class_with_inheritance) in
+  List.iter (fun x -> Hashtbl.replace super x.name (Option.get x.parent)) class_with_inheritance;
+
 
 
 
@@ -77,11 +87,10 @@ let type_program (p: unit program): typ program =
       | Bool b -> mk_expr TBool (Bool b)
       | Var x -> ( let t_e = try Env.find x tenv with
                   | Not_found -> let t_parent = match Env.find "_this" tenv with
-                                                | TClass name -> name
-                                                | _ -> print_endline "error var"; assert false 
+                                                | TClass name -> Env.find name cenv                                                                               | _ -> print_endline "error var"; assert false 
                                  in snd (List.find 
                                           (fun field -> (fst field) = x) 
-                                          (Env.find t_parent cenv).fields
+                                          t_parent.fields
                                         )
                       in
                       mk_expr t_e (Var x)
@@ -92,22 +101,24 @@ let type_program (p: unit program): typ program =
       | Binop (Add, e1, e2) -> mk_expr TInt (Binop (Add, check (type_expr e1) TInt, check (type_expr e2) TInt))
       | Binop (Mul, e1, e2) -> mk_expr TInt (Binop (Mul, check (type_expr e1) TInt, check (type_expr e2) TInt))
       | Binop (Lt, e1, e2) -> mk_expr TBool (Binop (Lt, check (type_expr e1) TInt, check (type_expr e2) TInt))
-      | Call (f, e) -> (try
-                       let args =  List.map type_expr e in
+      | Call (f, e) -> let args =  List.map type_expr e in
                        List.iter2 (fun x y -> ignore(check y (snd x)) ) (Env.find f fenv).params args; 
                        mk_expr (Env.find f fenv).return (Call (f, args))
-                        with
-                        | Not_found -> print_endline "error Call"; mk_expr (TInt) (Cst 1))
       | MCall (e, method_name, args) ->
-          (try
+          let rec aux cla_def =
+            (try List.find (fun (x : unit function_def) -> print_endline (x.name ^ " vs " ^ method_name); String.equal x.name method_name) (cla_def.methods) 
+              with
+              | Not_found -> let name_parent = Option.get cla_def.parent in
+                             let parent_def = Env.find name_parent cenv in
+                             aux parent_def
+            )
+          in
           let cla_name = get_name (type_expr e) in
           let cla_def = Env.find cla_name cenv in
-          let method_def = List.find (fun (x : unit function_def) -> String.equal x.name method_name) (cla_def.methods) in
+          let method_def = aux cla_def in
           let t_args = List.map type_expr args in
           List.iter2 (fun x y -> ignore(check y (snd x))) method_def.params t_args; 
           mk_expr method_def.return (MCall (type_expr e, method_name, t_args))
-                        with
-                        | Not_found -> print_endline "error MCall"; mk_expr (TInt) (Cst 1))
       | New (s, args) -> mk_expr (TClass s) (New (s, List.map type_expr args))
       | NewTab (typ, e) -> mk_expr (TArray typ) (NewTab (typ, type_expr e))
       | Read(Arr (e1, e2)) -> 
@@ -150,6 +161,7 @@ let type_program (p: unit program): typ program =
   in
   let add_this (cla:string) (f:'a function_def) = {f with params = ("_this", TClass cla) :: f.params}in
   let classes = List.map (fun cla -> {cla with methods = List.map type_fdef (List.map (add_this cla.name) cla.methods)}) classes in
-  
+ (* 
   List.iter (fun x -> print_endline x.name) classes;
+  *)
   { p with functions = List.map type_fdef p.functions ; classes = classes }

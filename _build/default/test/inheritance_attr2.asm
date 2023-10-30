@@ -14,7 +14,7 @@ main:
 	subi $sp, $sp, 4
 	sw $ra, 0($sp)
 	addi $fp, $sp, 4
-	addi $sp, $sp, -12
+	addi $sp, $sp, -16
 	li $t0, 16
 	move $a0, $t0
 	li $v0, 9
@@ -52,10 +52,10 @@ main:
 	lw $t1, 0($sp)
 	addi $sp, $sp, 4
 	sw $t0, 0($t1)
-	li $t6, -1
+	li $t6, -5
 	subi $sp, $sp, 4
 	sw $t6, 0($sp)
-	li $t6, 1
+	li $t6, 5
 	subi $sp, $sp, 4
 	sw $t6, 0($sp)
 	lw $t6, -12($fp)
@@ -77,10 +77,31 @@ main:
 	jalr $t0
 	addi $sp, $sp, 8
 	sw $t0, -16($fp)
+	li $t0, 16
+	move $a0, $t0
+	li $v0, 9
+	syscall
+	move $t0, $v0
+	sw $t0, -20($fp)
+	lw $t0, -20($fp)
+	subi $sp, $sp, 4
+	sw $t0, 0($sp)
+	la $t0, carre_descr
+	lw $t1, 0($sp)
+	addi $sp, $sp, 4
+	sw $t0, 0($t1)
+	li $t6, 26
+	subi $sp, $sp, 4
+	sw $t6, 0($sp)
+	lw $t6, -20($fp)
+	subi $sp, $sp, 4
+	sw $t6, 0($sp)
+	jal carre_constructor
+	addi $sp, $sp, 8
 	lw $t6, -12($fp)
 	subi $sp, $sp, 4
 	sw $t6, 0($sp)
-	li $t0, 12
+	li $t0, 8
 	lw $t1, -12($fp)
 	lw $t1, 0($t1)
 	add $t0, $t1, $t0
@@ -93,8 +114,21 @@ main:
 	lw $t6, -8($fp)
 	subi $sp, $sp, 4
 	sw $t6, 0($sp)
-	li $t0, 12
+	li $t0, 8
 	lw $t1, -8($fp)
+	lw $t1, 0($t1)
+	add $t0, $t1, $t0
+	lw $t0, 0($t0)
+	jalr $t0
+	addi $sp, $sp, 4
+	move $a0, $t0
+	li $v0, 11
+	syscall
+	lw $t6, -20($fp)
+	subi $sp, $sp, 4
+	sw $t6, 0($sp)
+	li $t0, 4
+	lw $t1, -20($fp)
 	lw $t1, 0($t1)
 	add $t0, $t1, $t0
 	lw $t0, 0($t0)
@@ -107,6 +141,34 @@ main:
 	move $a0, $t0
 	li $v0, 11
 	syscall
+	li $t0, 0
+	addi $sp, $fp, -4
+	lw $ra, 0($sp)
+	addi $sp, $sp, 4
+	lw $fp, 0($sp)
+	addi $sp, $sp, 4
+	jr $ra
+circle_get_z:
+	subi $sp, $sp, 4
+	sw $fp, 0($sp)
+	subi $sp, $sp, 4
+	sw $ra, 0($sp)
+	addi $fp, $sp, 4
+	addi $sp, $sp, 0
+	li $t0, 97
+	li $t1, 1
+	li $t2, 4
+	mul $t1, $t2, $t1
+	lw $t2, 4($fp)
+	add $t1, $t2, $t1
+	lw $t1, 0($t1)
+	add $t0, $t1, $t0
+	addi $sp, $fp, -4
+	lw $ra, 0($sp)
+	addi $sp, $sp, 4
+	lw $fp, 0($sp)
+	addi $sp, $sp, 4
+	jr $ra
 	li $t0, 0
 	addi $sp, $fp, -4
 	lw $ra, 0($sp)
@@ -198,27 +260,48 @@ point_sum:
 	lw $fp, 0($sp)
 	addi $sp, $sp, 4
 	jr $ra
-point_get_z:
+carre_constructor:
 	subi $sp, $sp, 4
 	sw $fp, 0($sp)
 	subi $sp, $sp, 4
 	sw $ra, 0($sp)
 	addi $fp, $sp, 4
 	addi $sp, $sp, 0
-	li $t0, 97
-	li $t1, 1
-	li $t2, 4
-	mul $t1, $t2, $t1
-	lw $t2, 4($fp)
-	add $t1, $t2, $t1
-	lw $t1, 0($t1)
+	li $t0, 2
+	li $t1, 4
+	mul $t0, $t1, $t0
+	lw $t1, 4($fp)
 	add $t0, $t1, $t0
-	addi $sp, $fp, -4
-	lw $ra, 0($sp)
+	subi $sp, $sp, 4
+	sw $t0, 0($sp)
+	lw $t0, 8($fp)
+	lw $t1, 0($sp)
 	addi $sp, $sp, 4
-	lw $fp, 0($sp)
+	sw $t0, 0($t1)
+	li $t0, 3
+	li $t1, 4
+	mul $t0, $t1, $t0
+	lw $t1, 4($fp)
+	add $t0, $t1, $t0
+	subi $sp, $sp, 4
+	sw $t0, 0($sp)
+	la $t0, y
+	lw $t0, 0($t0)
+	lw $t1, 0($sp)
 	addi $sp, $sp, 4
-	jr $ra
+	sw $t0, 0($t1)
+	li $t0, 1
+	li $t1, 4
+	mul $t0, $t1, $t0
+	lw $t1, 4($fp)
+	add $t0, $t1, $t0
+	subi $sp, $sp, 4
+	sw $t0, 0($sp)
+	la $t0, z
+	lw $t0, 0($t0)
+	lw $t1, 0($sp)
+	addi $sp, $sp, 4
+	sw $t0, 0($t1)
 	li $t0, 0
 	addi $sp, $fp, -4
 	lw $ra, 0($sp)
@@ -247,8 +330,11 @@ atoi_end:
 .data
 circle_descr:
 	.word 0
+	.word circle_get_z
 point_descr:
 	.word circle_descr
 	.word point_constructor
 	.word point_sum
-	.word point_get_z
+carre_descr:
+	.word point_descr
+	.word carre_constructor
