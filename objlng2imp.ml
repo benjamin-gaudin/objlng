@@ -8,13 +8,16 @@ let tr_op: Objlng.binop -> Imp.binop = function
 
 let rec find_index f lst =
   match lst with
-  | [] -> -1
+  | [] -> raise Not_found
   | h :: t -> if  f h = true then 0 else 1 + find_index f t
 
+let remove_method_class method_name=
+  String.concat "_" ( List.tl (String.split_on_char '_' method_name))
+
 let find_index_method method_name method_list =
-  match find_index (fun (x : 'a function_def) -> String.equal method_name x.name) method_list with
-  | -1 -> failwith "method does not exist"
-  | n -> n
+  find_index
+    (fun (x : 'a function_def) -> method_name = remove_method_class x.name)
+    method_list
 
 let imp_add x y = Binop (Add, x, y)
 
@@ -35,7 +38,13 @@ let translate_program (p: Objlng.typ Objlng.program) =
     | MCall (e1, method_name, args) ->
        let cla_name = get_name e1 in
        let cla_def = find_class_def cla_name in
+       print_endline ("\n" ^ cla_name ^ " :");
+       List.iter (fun (x: 'a function_def) -> print_endline x.name)
+       cla_def.methods;
+       print_endline ("Cherche: " ^ method_name );
        let index_method = find_index_method method_name cla_def.methods in
+       print_string "Trouver index : "; print_int index_method; print_string
+       "\n\n";
        DCall ((Deref (Binop (Add, (Deref (tr_expr e1)), (Cst (4 * (index_method + 1)))))),
               (List.map tr_expr (e1 :: args)))
     | NewTab (typ, e) -> Alloc (Binop (Mul, tr_expr e, Cst 4))
@@ -44,26 +53,26 @@ let translate_program (p: Objlng.typ Objlng.program) =
     | _ -> assert false
   and tr_mem = function
     | Arr (e1, e2) -> Imp.array_offset (tr_expr e1) (tr_expr e2)
-    | Atr (e1, s) -> 
+    | Atr (e1, s) ->
         let cla_name = get_name e1 in
         let index = match (find_index (fun x -> fst x = s) (find_class_def cla_name).fields) with
-           | -1 -> failwith "field not recognized" 
+           | -1 -> failwith "field not recognized"
            | n -> n
-         in 
+         in
          Imp.array_offset (tr_expr e1) (Cst (index+1))
- 
+
   in
 
   let rec tr_seq s = List.map tr_instr s
   and tr_instr: Objlng.typ Objlng.instruction -> Imp.instruction = function
     | Putchar e     -> Putchar(tr_expr e)
-    | Set     (s, { annot; expr = (New (class_name, args))}) -> 
-        Seq 
+    | Set     (s, { annot; expr = (New (class_name, args))}) ->
+        Seq
         [
         Set (s, (Alloc (Cst(4 * (1 + List.length (find_class_def class_name).fields)))));
         Write (Var s, Addr(class_name ^ "_" ^ "descr"));
         Expr (Call (class_name ^ "_constructor", Var s :: List.map tr_expr args));
-        ]  
+        ]
     | Set     (s, e)-> Set (s, tr_expr e)
     | If      (e, seq1, seq2) -> If (tr_expr e, tr_seq seq1, tr_seq seq2)
     | While   (e, seq) -> While (tr_expr e, tr_seq seq)
@@ -74,35 +83,45 @@ let translate_program (p: Objlng.typ Objlng.program) =
 
   let tr_class_methods cla =
     let tr_method (f : 'a function_def) =
-      { name = cla.name ^ "_" ^ f.name;
+      (*{ name = cla.name ^ "_" ^ f.name;)*)
+      { name = f.name;
         params = List.map fst f.params;
         locals = List.map fst f.locals;
         code = tr_seq f.code; }
     in
-    List.map tr_method cla.methods
+    let methods_of_this_class =
+      List.filter ( fun (x : 'a function_def) ->
+        cla.name = List.hd (String.split_on_char '_' x.name))
+      cla.methods
+    in
+    List.map tr_method methods_of_this_class
   in
 
   let tr_fdef (fdef: Objlng.typ Objlng.function_def) =
-    { Imp.name = fdef.name; 
-      params = List.map fst fdef.params; 
-      locals = List.map fst fdef.locals; 
+    { Imp.name = fdef.name;
+      params = List.map fst fdef.params;
+      locals = List.map fst fdef.locals;
       code = tr_seq fdef.code;
     }
   in
 
   let functions = List.map tr_fdef p.functions in
   let functions2 = List.flatten (List.map tr_class_methods p.classes) in
-  
-  let class_descrs = List.map (fun (cla_def :'a Objlng.class_def) -> 
+
+  let class_descrs = List.map (fun (cla_def :'a Objlng.class_def) ->
     { descr_name = cla_def.name ^ "_descr";
+    (*
      methods = List.map (fun (m : 'a function_def) -> cla_def.name ^"_"^ m.name) cla_def.methods;
-     parent = if Option.is_some cla_def.parent then 
+     *)
+     methods = List.map (fun (m : 'a function_def) -> m.name) cla_def.methods;
+     parent = if Option.is_some cla_def.parent then
                 Some (Option.get cla_def.parent ^ "_descr")
               else None;
     }) p.classes
   in
 
-  { Imp.globals = List.map fst p.globals;
+    { Imp.globals = List.map fst p.globals @
+      List.map (fun x -> x.descr_name) class_descrs;
     class_descrs = class_descrs;
     functions = functions @ functions2 }
 

@@ -2,7 +2,7 @@
 open Imp
 open Mips
 
-   
+
 let push reg =
   subi sp sp 4
   @@ sw reg 0 sp
@@ -14,7 +14,7 @@ let tr_function fdef =
   let env = Hashtbl.create 16 in
   List.iteri (fun k id -> Hashtbl.add env id (4*(k+1))) fdef.params;
   List.iteri (fun k id -> Hashtbl.add env id (-4*(k+2))) fdef.locals;
-  
+
   let new_label =
     let cpt = ref (-1) in
     fun () -> incr cpt; Printf.sprintf "__%s_%i" fdef.name !cpt
@@ -28,7 +28,7 @@ let tr_function fdef =
         | Some offset -> lw t6 offset fp
         | None -> la t6 id @@ lw t6 0 t6
       end
-             
+
     | Binop(bop, e1, e2) ->
        let op = match bop with
          | Add -> add
@@ -39,7 +39,7 @@ let tr_function fdef =
        @@ push t6
        @@ tr_expr_stack e1
        @@ pop t7
-       @@ op t6 t6 t7      
+       @@ op t6 t6 t7
     | Call(f, params) ->
        let params_code =
          List.fold_right
@@ -50,14 +50,14 @@ let tr_function fdef =
        @@ jal f
        @@ addi sp sp (4 * List.length params)
     | Deref e ->
-       tr_expr 0 e 
+       tr_expr 0 e
        @@ lw t0 0(t0)
     | Alloc e ->
        tr_expr_stack e
        @@ move a0 t0
        @@ li v0 9
-       @@ syscall 
-       @@ move t0 v0 
+       @@ syscall
+       @@ move t0 v0
     | Addr s ->
        la t0 s
     | DCall (e1, params) ->
@@ -71,9 +71,9 @@ let tr_function fdef =
        @@ jalr t0
        @@ addi sp sp (4 * List.length params)
 
-  and tr_expr i e = 
+  and tr_expr i e =
    let regs = [|t0; t1; t2; t3; t4; t5; t6; t7|] in
-   if i > 5 then 
+   if i > 5 then
       tr_expr_stack e
       @@ move regs.(i) t6
    else
@@ -86,7 +86,7 @@ let tr_function fdef =
         | None -> la regs.(i) id @@ lw regs.(i) 0 regs.(i)
       end
     | Binop(bop, e1, e2) ->
-      if i > 4 then 
+      if i > 4 then
          tr_expr_stack e
          @@ move regs.(i) t6
       else
@@ -95,9 +95,9 @@ let tr_function fdef =
          | Mul -> mul
          | Lt  -> slt
        in
-       tr_expr i e2 
+       tr_expr i e2
        @@ tr_expr (i+1) e1
-       @@ op regs.(i) regs.(i+1) regs.(i)      
+       @@ op regs.(i) regs.(i+1) regs.(i)
 
     | Call(f, params) ->
        let params_code =
@@ -109,14 +109,14 @@ let tr_function fdef =
        @@ jal f
        @@ addi sp sp (4 * List.length params)
     | Deref e ->
-       tr_expr i e 
+       tr_expr i e
        @@ lw regs.(i) 0(regs.(i))
     | Alloc e ->
        tr_expr i e
        @@ move a0 regs.(i)
        @@ li v0 9
-       @@ syscall 
-       @@ move regs.(i) v0 
+       @@ syscall
+       @@ move regs.(i) v0
     | Addr s ->
        la regs.(i) s
     | DCall (e1, params) ->
@@ -237,17 +237,21 @@ let translate_program prog =
   in
   let text = init @@ function_codes @@ built_ins
   and data = List.fold_right
-    (fun id code -> label id @@ dword [0] @@ code)
-    prog.globals nop
+    (fun id code ->
+      if not (String.ends_with "_descr" id) then
+        label id @@ dword [0] @@ code
+      else
+        nop @@ code)
+   prog.globals nop
   in
   let data2 = List.fold_right
     (fun id code -> label id.descr_name @@
-                    (if Option.is_none id.parent 
-                      then dword[0] 
+                    (if Option.is_none id.parent
+                      then dword[0]
                       else (print_endline "inheritance" ;string_word (Option.get id.parent))) @@ (*TODO Inheritance*)
                     List.fold_right (fun x acc -> string_word x @@ acc) id.methods nop @@
                     code)
     prog.class_descrs nop
   in
-  
+
   { text; data = data @@ data2 }

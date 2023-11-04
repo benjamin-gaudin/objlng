@@ -4,6 +4,9 @@ class circle {
   method int get_z() {
     return this.z + 97;
   }
+  method int test() {
+    return 1;
+  }
 }
 
 class point extends circle {
@@ -35,9 +38,11 @@ function void main() {
   p = new point(1, 2);
   p2 = new point(5, -5);
   c = p.sum(48);
-  carre = new carre(26);
+  carre = new carre(5);
   putchar(p2.get_z());
   putchar(p.get_z());
   putchar(carre.get_z());
   putchar(c);
 }
+
+// result : adf3

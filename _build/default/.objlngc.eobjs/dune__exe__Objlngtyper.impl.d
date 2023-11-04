@@ -1,1 +1,1 @@
-objlngtyper.ml: Hashtbl List Map Objlng Option String
+objlngtyper.ml: List Map Objlng Option String

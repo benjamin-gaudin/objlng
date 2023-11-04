@@ -24,47 +24,101 @@ let type_program (p: unit program): typ program =
   List.iter (fun (x : 'a function_def) -> print_endline x.name) p.functions;
 
 
-  let rec add_attr_inheritance classes classes_previous = 
-
+  let rec add_attr_inheritance classes classes_previous =
+    let rename_method (cla : 'a class_def) (met : 'a function_def) =
+      {met with name = (cla.name ^ "_" ^ met.name)}
+    in
     let aux cla classes_list = print_endline "call aux"; match cla.parent with
-      | None -> cla
-      | Some parent_cla -> 
-           
-            try
-              let parent_fields =
-              (List.find (fun x -> 
-                print_endline (x.name ^" vs "^ parent_cla^ "");
-                String.equal x.name parent_cla) 
-              classes_list).fields in
-              (*
-              let methods = List.map (fun f_def -> {f_def with locals = parent_fields @ f_def.locals } ) cla.methods 
-              in
-              *)
-              {cla with fields = parent_fields @ cla.fields}
-            with
-            | Not_found -> print_endline "error pour l'héritage"; cla
+      | None -> { cla with methods = List.map (rename_method cla) cla.methods}
+      | Some parent_cla ->
+
+        try
+          let parent_def =
+            List.find (fun x -> x.name = parent_cla) classes_list
+          in
+          let parent_fields = parent_def.fields in
+          let cla_methods =
+            List.map (fun (x : 'a function_def) -> x.name) cla.methods
+          in
+          let remove_class name =
+            String.concat "_" (List.tl (String.split_on_char '_' name))
+          in
+          let inheritance_methods =
+            List.filter
+            (fun (x : 'a function_def) ->
+              not (List.mem (remove_class x.name) cla_methods))
+            parent_def.methods
+          in
+          let renamed_cla_methods = List.map (rename_method cla) cla.methods in
+          let
+            renamed_inheritance_methods =
+              List.map (rename_method cla) inheritance_methods
+          in
+          (*
+          let methods = List.map (fun f_def -> {f_def with locals = parent_fields @ f_def.locals } ) cla.methods
+          in
+          *)
+          {cla with fields = parent_fields @ cla.fields;
+                    methods = inheritance_methods @ renamed_cla_methods}
+        with
+        | Not_found -> print_endline "error pour l'héritage"; cla
     in
     match classes with
     | [] -> print_endline "fin de la fonction "; classes_previous
     | cla :: t -> let new_cla = aux cla classes_previous in
-                  add_attr_inheritance t (new_cla :: classes_previous) 
+                  add_attr_inheritance t (new_cla :: classes_previous)
   in
   let classes = List.rev (add_attr_inheritance p.classes []) in
+
+
+  (*
+
+  let methods = Hashtbl.create (List.length class_with_inheritance) in
+
+  let add_methods classes classes_previous
+    let aux_add_methods cla classes_previous = match cla.parent with
+      | None -> cla
+      | Some parent_name ->
+          let parent_def =
+            List.find (fun x -> x.name = parent_cla) classes_list
+          in
+          let parent_fields = parent_def.fields in
+          let cla_methods =
+            List.map (fun (x : 'a function_def) -> x.name) cla.methods
+          in
+          let inheritance_methods =
+            List.filter
+            (fun (x : 'a function_def) ->
+              not (List.mem (remove_class x.name) cla_methods))
+            parent_def.methods
+          in
+
+    in
+    match classes with
+    | [] -> classes_previous
+    | cla :: t -> let new_cla = aux_add_methods cla classes_previous in
+                  add_methods t (new_cla :: classes_previous)
+  in
+
+*)
+
+
   (*
   print_string "taille de la liste : ";
   print_int (List.length classes);
   print_endline "";
-  List.iter (fun x -> 
+  List.iter (fun x ->
     List.iter (fun y -> print_endline (x.name ^ " : " ^ (fst y))) x.fields;
     if Option.is_some x.parent then print_endline (x.name ^ " parent : "^(Option.get x.parent)) )
   classes;
   *)
 
 
+  (*
   let class_with_inheritance = List.filter (fun x -> Option.is_some x.parent) p.classes in
   let super = Hashtbl.create (List.length class_with_inheritance) in
   List.iter (fun x -> Hashtbl.replace super x.name (Option.get x.parent)) class_with_inheritance;
-
+  *)
 
 
 
@@ -87,14 +141,14 @@ let type_program (p: unit program): typ program =
       | Bool b -> mk_expr TBool (Bool b)
       | Var x -> ( let t_e = try Env.find x tenv with
                   | Not_found -> let t_parent = match Env.find "_this" tenv with
-                                                | TClass name -> Env.find name cenv                                                                               | _ -> print_endline "error var"; assert false 
-                                 in snd (List.find 
-                                          (fun field -> (fst field) = x) 
+                                                | TClass name -> Env.find name cenv                                                                               | _ -> print_endline "error var"; assert false
+                                 in snd (List.find
+                                          (fun field -> (fst field) = x)
                                           t_parent.fields
                                         )
                       in
                       mk_expr t_e (Var x)
-                  )                
+                  )
                   (*
                   | Not_found -> print_endline ("error var wiht var = " ^ x); mk_expr (TInt) (Cst 1))
                   *)
@@ -102,13 +156,26 @@ let type_program (p: unit program): typ program =
       | Binop (Mul, e1, e2) -> mk_expr TInt (Binop (Mul, check (type_expr e1) TInt, check (type_expr e2) TInt))
       | Binop (Lt, e1, e2) -> mk_expr TBool (Binop (Lt, check (type_expr e1) TInt, check (type_expr e2) TInt))
       | Call (f, e) -> let args =  List.map type_expr e in
-                       List.iter2 (fun x y -> ignore(check y (snd x)) ) (Env.find f fenv).params args; 
+                       List.iter2 (fun x y -> ignore(check y (snd x)) ) (Env.find f fenv).params args;
                        mk_expr (Env.find f fenv).return (Call (f, args))
       | MCall (e, method_name, args) ->
+          let method_name_remove_class meth_name=
+              String.concat "_" (List.tl (String.split_on_char '_' meth_name))
+          in
           let rec aux cla_def =
-            (try List.find (fun (x : unit function_def) -> print_endline (x.name ^ " vs " ^ method_name); String.equal x.name method_name) (cla_def.methods) 
+            (try List.find (fun (x : unit function_def) ->
+              print_endline ((method_name_remove_class x.name) ^" vs "^ method_name);
+              method_name_remove_class x.name = method_name)
+              cla_def.methods
+            (*
+              (List.map method_name_remove_class cla_def.methods)
+            *)
               with
-              | Not_found -> let name_parent = Option.get cla_def.parent in
+              | Not_found -> let name_parent =
+                               try Option.get cla_def.parent with
+                               | Invalid_argument s -> print_endline
+                               method_name; "_"
+                             in
                              let parent_def = Env.find name_parent cenv in
                              aux parent_def
             )
@@ -117,21 +184,21 @@ let type_program (p: unit program): typ program =
           let cla_def = Env.find cla_name cenv in
           let method_def = aux cla_def in
           let t_args = List.map type_expr args in
-          List.iter2 (fun x y -> ignore(check y (snd x))) method_def.params t_args; 
+          List.iter2 (fun x y -> ignore(check y (snd x))) method_def.params t_args;
           mk_expr method_def.return (MCall (type_expr e, method_name, t_args))
       | New (s, args) -> mk_expr (TClass s) (New (s, List.map type_expr args))
       | NewTab (typ, e) -> mk_expr (TArray typ) (NewTab (typ, type_expr e))
-      | Read(Arr (e1, e2)) -> 
+      | Read(Arr (e1, e2)) ->
           let t_e1 = get_array_type(type_expr e1) in
           mk_expr (t_e1) (Read(Arr(type_expr e1, check (type_expr e2) TInt)))
-      | Read(Atr (e1, field)) ->  
+      | Read(Atr (e1, field)) ->
           (try
-          let cla_name = get_name (type_expr e1) in                        
+          let cla_name = get_name (type_expr e1) in
           mk_expr (snd (List.find (fun x -> fst x = field) (Env.find cla_name cenv).fields))
                   (Read(Atr(type_expr e1, field)))
                         with
                         | Not_found -> print_endline "error Read"; mk_expr (TInt) (Cst 1))
-      | This -> (try mk_expr (Env.find "_this" tenv) This with 
+      | This -> (try mk_expr (Env.find "_this" tenv) This with
                 | Not_found -> print_endline "erro this"; mk_expr (TInt) (Cst 1))
     in
 
@@ -139,19 +206,19 @@ let type_program (p: unit program): typ program =
     let rec type_seq s = List.map type_instr s
     and type_instr = function
       | Putchar e     -> Putchar (check (type_expr e) TInt)
-      | Set     (s, e)-> Set (s, type_expr e) 
+      | Set     (s, e)-> Set (s, type_expr e)
       | If      (e, seq1, seq2) -> If (check (type_expr e) TBool, type_seq seq1, type_seq seq2)
       | While   (e, seq) -> While (check (type_expr e) TBool, type_seq seq)
       | Return  e -> Return (type_expr e)
       | Expr    e -> Expr (type_expr e)
-      | Write (Arr (e1, e2), e) -> 
+      | Write (Arr (e1, e2), e) ->
           let t_e1 =  get_array_type (type_expr e1) in
           if t_e1 <> (type_expr e).annot then failwith "type error"
           else Write (Arr(type_expr e1, check (type_expr e2) TInt), type_expr e)
-      | Write (Atr (e1, field), e) -> 
+      | Write (Atr (e1, field), e) ->
           (try
           let cla_name = get_name (type_expr e1) in
-          if (snd (List.find (fun x -> print_endline ((fst x) ^" vs " ^ field);fst x = field) (Env.find cla_name cenv).fields)) <> (type_expr e).annot 
+          if (snd (List.find (fun x -> print_endline ((fst x) ^" vs " ^ field);fst x = field) (Env.find cla_name cenv).fields)) <> (type_expr e).annot
           then failwith "type error"
           else Write (Atr (type_expr e1, field), type_expr e)
           with
@@ -160,8 +227,11 @@ let type_program (p: unit program): typ program =
     { fdef with code = type_seq fdef.code }
   in
   let add_this (cla:string) (f:'a function_def) = {f with params = ("_this", TClass cla) :: f.params}in
-  let classes = List.map (fun cla -> {cla with methods = List.map type_fdef (List.map (add_this cla.name) cla.methods)}) classes in
- (* 
+  let classes = List.map
+    (fun cla -> {cla with methods = List.map type_fdef (List.map (add_this cla.name) cla.methods)})
+    classes
+  in
+ (*
   List.iter (fun x -> print_endline x.name) classes;
   *)
   { p with functions = List.map type_fdef p.functions ; classes = classes }

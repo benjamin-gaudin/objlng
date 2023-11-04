@@ -1,9 +1,9 @@
 # dune build
 # OCAMLPARAM: unset
 # Shared cache: disabled
-# Workspace root: /home/john/Documents/Compil/git
+# Workspace root: /home/john/Documents/T1/Compil/git2
 # Auto-detected concurrency: 4
-$ /home/john/.opam/default/bin/ocamlc.opt -config > /tmp/dune_94402e_output
+$ /home/john/.opam/default/bin/ocamlc.opt -config > /tmp/dune_6f648f_output
 # Dune context:
 #  { name = "default"
 #  ; kind = "default"
@@ -17,16 +17,19 @@ $ /home/john/.opam/default/bin/ocamlc.opt -config > /tmp/dune_94402e_output
 #  ; ocamlc = External "/home/john/.opam/default/bin/ocamlc.opt"
 #  ; ocamlopt = Ok External "/home/john/.opam/default/bin/ocamlopt.opt"
 #  ; ocamldep = Ok External "/home/john/.opam/default/bin/ocamldep.opt"
-#  ; ocamlmklib = Ok External "/home/john/.opam/default/bin/ocamlmklib.opt"
+#  ; ocamlmklib = Ok External "/home/john/.opam/default/bin/ocamlmklib"
 #  ; installed_env =
 #      map
-#        { "INSIDE_DUNE" : "/home/john/Documents/Compil/git/_build/default"
+#        { "INSIDE_DUNE" : "/home/john/Documents/T1/Compil/git2/_build/default"
 #        ; "OCAML_COLOR" : "always"
 #        ; "OPAMCOLOR" : "always"
 #        }
-#  ; findlib_paths = [ External "/home/john/.opam/default/lib" ]
+#  ; findlib_paths =
+#      [ External "/home/john/.opam/default/lib/ocaml"
+#      ; External "/home/john/.opam/default/lib"
+#      ]
 #  ; ocaml_config =
-#      { version = "4.14.1"
+#      { version = "5.1.0"
 #      ; standard_library_default = "/home/john/.opam/default/lib/ocaml"
 #      ; standard_library = "/home/john/.opam/default/lib/ocaml"
 #      ; standard_runtime = "the_standard_runtime_variable_was_deleted"
@@ -47,7 +50,7 @@ $ /home/john/.opam/default/bin/ocamlc.opt -config > /tmp/dune_94402e_output
 #          ; "-fPIC"
 #          ; "-D_FILE_OFFSET_BITS=64"
 #          ]
-#      ; bytecomp_c_libraries = [ "-lm"; "-ldl"; "-lpthread" ]
+#      ; bytecomp_c_libraries = [ "-lm"; "-lpthread" ]
 #      ; native_c_compiler =
 #          [ "gcc"
 #          ; "-O2"
@@ -57,7 +60,7 @@ $ /home/john/.opam/default/bin/ocamlc.opt -config > /tmp/dune_94402e_output
 #          ; "-fPIC"
 #          ; "-D_FILE_OFFSET_BITS=64"
 #          ]
-#      ; native_c_libraries = [ "-lm"; "-ldl" ]
+#      ; native_c_libraries = [ "-lm"; "-lpthread" ]
 #      ; native_pack_linker = [ "ld"; "-r"; "-o" ]
 #      ; cc_profile = []
 #      ; architecture = "amd64"
@@ -82,19 +85,21 @@ $ /home/john/.opam/default/bin/ocamlc.opt -config > /tmp/dune_94402e_output
 #      ; flambda = false
 #      ; spacetime = false
 #      ; safe_string = true
-#      ; exec_magic_number = "Caml1999X031"
-#      ; cmi_magic_number = "Caml1999I031"
-#      ; cmo_magic_number = "Caml1999O031"
-#      ; cma_magic_number = "Caml1999A031"
-#      ; cmx_magic_number = "Caml1999Y031"
-#      ; cmxa_magic_number = "Caml1999Z031"
-#      ; ast_impl_magic_number = "Caml1999M031"
-#      ; ast_intf_magic_number = "Caml1999N031"
-#      ; cmxs_magic_number = "Caml1999D031"
-#      ; cmt_magic_number = "Caml1999T031"
+#      ; exec_magic_number = "Caml1999X033"
+#      ; cmi_magic_number = "Caml1999I033"
+#      ; cmo_magic_number = "Caml1999O033"
+#      ; cma_magic_number = "Caml1999A033"
+#      ; cmx_magic_number = "Caml1999Y033"
+#      ; cmxa_magic_number = "Caml1999Z033"
+#      ; ast_impl_magic_number = "Caml1999M033"
+#      ; ast_intf_magic_number = "Caml1999N033"
+#      ; cmxs_magic_number = "Caml1999D033"
+#      ; cmt_magic_number = "Caml1999T033"
 #      ; natdynlink_supported = true
 #      ; supports_shared_libraries = true
 #      ; windows_unicode = false
 #      }
 #  ; instrument_with = []
 #  }
+$ (cd _build/default && /home/john/.opam/default/bin/ocamldep.opt -modules -impl imppp.ml) > _build/default/.objlngc.eobjs/dune__exe__Imppp.impl.d
+$ (cd _build/default && /home/john/.opam/default/bin/ocamlc.opt -g -bin-annot -I .objlngc.eobjs/byte -no-alias-deps -opaque -open Dune__exe -o .objlngc.eobjs/byte/dune__exe__Imppp.cmo -c -impl imppp.ml)

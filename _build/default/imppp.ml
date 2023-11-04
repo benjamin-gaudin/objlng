@@ -10,14 +10,14 @@ let rec print_expr fmt = function
   | Cst n -> fprintf fmt "%d" n
   | Bool b -> fprintf fmt "%b" b
   | Var x -> fprintf fmt "%s" x
-  | Binop(op, e1, e2) -> 
+  | Binop(op, e1, e2) ->
      fprintf fmt "(@[%a %s@ %a@])" print_expr e1 (op2string op) print_expr e2
   | Call(f, args) -> fprintf fmt "%s(@[%a@])" f print_args args
   | Deref e -> fprintf fmt "*@[%a@]" print_expr e
   | Alloc e -> fprintf fmt "alloc(@[%a@])" print_expr e
 
   | Addr s -> fprintf fmt "*@[%s@]" s
-  | DCall (e, args) -> fprintf fmt "*(%a)(@[%a@])" print_expr e print_args args 
+  | DCall (e, args) -> fprintf fmt "*(%a)(@[%a@])" print_expr e print_args args
 and print_args fmt = function
   | [] -> fprintf fmt ""
   | [a] -> fprintf fmt "%a" print_expr a
@@ -26,7 +26,7 @@ and print_args fmt = function
 and print_instr fmt = function
   | Putchar e -> fprintf fmt "putchar(@[%a@]);" print_expr e
   | Set(x, e) -> fprintf fmt "%s = @[%a@];" x print_expr e
-  | If(e, s1, s2) -> fprintf fmt "@[<v>@[<v 2>if (@[%a@]) {@,%a@]@,@[<v 2>} else {@,%a@]@,}@]" 
+  | If(e, s1, s2) -> fprintf fmt "@[<v>@[<v 2>if (@[%a@]) {@,%a@]@,@[<v 2>} else {@,%a@]@,}@]"
                        print_expr e print_seq s1 print_seq s2
   | While(e, s) -> fprintf fmt "@[<v>@[<v 2>while (@[%a@]) {@,%a@]@,}@]"
                      print_expr e print_seq s
@@ -50,7 +50,7 @@ let rec print_vars fmt = function
   | x::vars -> fprintf fmt "@[<v>var %s;@,%a@]" x print_vars vars
 
 let print_fdef fmt (fdef: Imp.function_def) =
-  fprintf fmt "@[<v>@[<v 2>function %s(@[%a@]) {@,%a@,%a@]@,}@,@]" 
+  fprintf fmt "@[<v>@[<v 2>function %s(@[%a@]) {@,%a@,%a@]@,}@,@]"
     fdef.name print_params fdef.params print_vars fdef.locals print_seq fdef.code
 
 let rec print_functions fmt = function
