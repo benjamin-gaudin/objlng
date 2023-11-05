@@ -248,7 +248,7 @@ let translate_program prog =
     (fun id code -> label id.descr_name @@
                     (if Option.is_none id.parent
                       then dword[0]
-                      else (print_endline "inheritance" ;string_word (Option.get id.parent))) @@ (*TODO Inheritance*)
+                      else (string_word (Option.get id.parent))) @@
                     List.fold_right (fun x acc -> string_word x @@ acc) id.methods nop @@
                     code)
     prog.class_descrs nop

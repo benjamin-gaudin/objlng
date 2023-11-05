@@ -3,7 +3,7 @@
 # Shared cache: disabled
 # Workspace root: /home/john/Documents/T1/Compil/git2
 # Auto-detected concurrency: 4
-$ /home/john/.opam/default/bin/ocamlc.opt -config > /tmp/dune_6f648f_output
+$ /home/john/.opam/default/bin/ocamlc.opt -config > /tmp/dune_1b2041_output
 # Dune context:
 #  { name = "default"
 #  ; kind = "default"
@@ -101,5 +101,3 @@ $ /home/john/.opam/default/bin/ocamlc.opt -config > /tmp/dune_6f648f_output
 #      }
 #  ; instrument_with = []
 #  }
-$ (cd _build/default && /home/john/.opam/default/bin/ocamldep.opt -modules -impl imppp.ml) > _build/default/.objlngc.eobjs/dune__exe__Imppp.impl.d
-$ (cd _build/default && /home/john/.opam/default/bin/ocamlc.opt -g -bin-annot -I .objlngc.eobjs/byte -no-alias-deps -opaque -open Dune__exe -o .objlngc.eobjs/byte/dune__exe__Imppp.cmo -c -impl imppp.ml)

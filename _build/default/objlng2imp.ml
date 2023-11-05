@@ -38,13 +38,7 @@ let translate_program (p: Objlng.typ Objlng.program) =
     | MCall (e1, method_name, args) ->
        let cla_name = get_name e1 in
        let cla_def = find_class_def cla_name in
-       print_endline ("\n" ^ cla_name ^ " :");
-       List.iter (fun (x: 'a function_def) -> print_endline x.name)
-       cla_def.methods;
-       print_endline ("Cherche: " ^ method_name );
        let index_method = find_index_method method_name cla_def.methods in
-       print_string "Trouver index : "; print_int index_method; print_string
-       "\n\n";
        DCall ((Deref (Binop (Add, (Deref (tr_expr e1)), (Cst (4 * (index_method + 1)))))),
               (List.map tr_expr (e1 :: args)))
     | NewTab (typ, e) -> Alloc (Binop (Mul, tr_expr e, Cst 4))
@@ -55,11 +49,10 @@ let translate_program (p: Objlng.typ Objlng.program) =
     | Arr (e1, e2) -> Imp.array_offset (tr_expr e1) (tr_expr e2)
     | Atr (e1, s) ->
         let cla_name = get_name e1 in
-        let index = match (find_index (fun x -> fst x = s) (find_class_def cla_name).fields) with
-           | -1 -> failwith "field not recognized"
-           | n -> n
-         in
-         Imp.array_offset (tr_expr e1) (Cst (index+1))
+        let index =
+          find_index (fun x -> fst x = s) (find_class_def cla_name).fields
+        in
+        Imp.array_offset (tr_expr e1) (Cst (index+1))
 
   in
 
