@@ -22,6 +22,7 @@
 %token LPAR RPAR BEGIN END COMMA SEMI
 %token PUTCHAR SET IF ELSE WHILE RETURN
 %token EOF
+%token SUPER
 
 %left LT
 %left PLUS
@@ -55,8 +56,8 @@ decl:
 
 
 class_def:
-| CLASS name=IDENT parent=option(EXTENDS p=IDENT { p }) 
-   BEGIN fields=list(attribute_decl) methods=list(method_def) END 
+| CLASS name=IDENT parent=option(EXTENDS p=IDENT { p })
+   BEGIN fields=list(attribute_decl) methods=list(method_def) END
    { { name; fields; methods; parent; } }
 ;
 
@@ -66,7 +67,7 @@ variable_decl:
 
 attribute_decl:
 | ATTRIBUTE tid=typed_ident SEMI { tid }
-;  
+;
 
 typed_ident:
 | ty=typ id=IDENT { id, ty }
@@ -124,6 +125,7 @@ expression:
 | NEW LBRACKET ty=typ COMMA e=expression RBRACKET { mk_expr () (NewTab(ty, e)) }
 | m=mem_access { mk_expr () (Read m) }
 | THIS { mk_expr () (This) }
+| SUPER { mk_expr () (This) } (* TODO *)
 ;
 
 %inline binop:

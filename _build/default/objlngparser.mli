@@ -8,6 +8,7 @@ type token =
   | TYP_INT
   | TYP_BOOL
   | THIS
+  | SUPER
   | STAR
   | SET
   | SEMI

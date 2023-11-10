@@ -13,7 +13,8 @@
         "while",    WHILE;
         "true",     BOOL true;
         "false",    BOOL false;
-        "var",      VAR;        
+        "var",      VAR;
+        "super",    SUPER;
         "function", FUNCTION;
         "class",    CLASS;
         "attribute", ATTRIBUTE;
@@ -29,9 +30,9 @@
     fun s ->
       try  Hashtbl.find h s
       with Not_found -> IDENT(s)
-        
 
-# 35 "objlnglexer.ml"
+
+# 36 "objlnglexer.ml"
 let __ocaml_lex_tables = {
   Lexing.lex_base =
    "\000\000\235\255\236\255\237\255\238\255\239\255\240\255\241\255\
@@ -153,119 +154,119 @@ let rec token lexbuf =
 and __ocaml_lex_token_rec lexbuf __ocaml_lex_state =
   match Lexing.engine __ocaml_lex_tables __ocaml_lex_state lexbuf with
       | 0 ->
-# 41 "objlnglexer.mll"
+# 42 "objlnglexer.mll"
       ( new_line lexbuf; token lexbuf )
-# 159 "objlnglexer.ml"
+# 160 "objlnglexer.ml"
 
   | 1 ->
-# 43 "objlnglexer.mll"
+# 44 "objlnglexer.mll"
       ( token lexbuf )
-# 164 "objlnglexer.ml"
+# 165 "objlnglexer.ml"
 
   | 2 ->
-# 45 "objlnglexer.mll"
+# 46 "objlnglexer.mll"
       ( new_line lexbuf; token lexbuf )
-# 169 "objlnglexer.ml"
+# 170 "objlnglexer.ml"
 
   | 3 ->
-# 47 "objlnglexer.mll"
+# 48 "objlnglexer.mll"
       ( comment lexbuf; token lexbuf )
-# 174 "objlnglexer.ml"
+# 175 "objlnglexer.ml"
 
   | 4 ->
 let
-# 48 "objlnglexer.mll"
-              n
-# 180 "objlnglexer.ml"
-= Lexing.sub_lexeme lexbuf lexbuf.Lexing.lex_start_pos lexbuf.Lexing.lex_curr_pos in
 # 49 "objlnglexer.mll"
+              n
+# 181 "objlnglexer.ml"
+= Lexing.sub_lexeme lexbuf lexbuf.Lexing.lex_start_pos lexbuf.Lexing.lex_curr_pos in
+# 50 "objlnglexer.mll"
       ( CST(int_of_string n) )
-# 184 "objlnglexer.ml"
+# 185 "objlnglexer.ml"
 
   | 5 ->
 let
-# 50 "objlnglexer.mll"
-             id
-# 190 "objlnglexer.ml"
-= Lexing.sub_lexeme lexbuf lexbuf.Lexing.lex_start_pos lexbuf.Lexing.lex_curr_pos in
 # 51 "objlnglexer.mll"
+             id
+# 191 "objlnglexer.ml"
+= Lexing.sub_lexeme lexbuf lexbuf.Lexing.lex_start_pos lexbuf.Lexing.lex_curr_pos in
+# 52 "objlnglexer.mll"
       ( keyword_or_ident id )
-# 194 "objlnglexer.ml"
+# 195 "objlnglexer.ml"
 
   | 6 ->
-# 53 "objlnglexer.mll"
+# 54 "objlnglexer.mll"
       ( SEMI )
-# 199 "objlnglexer.ml"
+# 200 "objlnglexer.ml"
 
   | 7 ->
-# 55 "objlnglexer.mll"
+# 56 "objlnglexer.mll"
       ( SET )
-# 204 "objlnglexer.ml"
+# 205 "objlnglexer.ml"
 
   | 8 ->
-# 57 "objlnglexer.mll"
+# 58 "objlnglexer.mll"
       ( PLUS )
-# 209 "objlnglexer.ml"
+# 210 "objlnglexer.ml"
 
   | 9 ->
-# 59 "objlnglexer.mll"
+# 60 "objlnglexer.mll"
       ( STAR )
-# 214 "objlnglexer.ml"
+# 215 "objlnglexer.ml"
 
   | 10 ->
-# 61 "objlnglexer.mll"
+# 62 "objlnglexer.mll"
       ( LT )
-# 219 "objlnglexer.ml"
+# 220 "objlnglexer.ml"
 
   | 11 ->
-# 63 "objlnglexer.mll"
+# 64 "objlnglexer.mll"
       ( LPAR )
-# 224 "objlnglexer.ml"
+# 225 "objlnglexer.ml"
 
   | 12 ->
-# 65 "objlnglexer.mll"
+# 66 "objlnglexer.mll"
       ( RPAR )
-# 229 "objlnglexer.ml"
+# 230 "objlnglexer.ml"
 
   | 13 ->
-# 67 "objlnglexer.mll"
+# 68 "objlnglexer.mll"
       ( BEGIN )
-# 234 "objlnglexer.ml"
+# 235 "objlnglexer.ml"
 
   | 14 ->
-# 69 "objlnglexer.mll"
+# 70 "objlnglexer.mll"
       ( END )
-# 239 "objlnglexer.ml"
+# 240 "objlnglexer.ml"
 
   | 15 ->
-# 71 "objlnglexer.mll"
+# 72 "objlnglexer.mll"
       ( LBRACKET )
-# 244 "objlnglexer.ml"
+# 245 "objlnglexer.ml"
 
   | 16 ->
-# 73 "objlnglexer.mll"
+# 74 "objlnglexer.mll"
       ( RBRACKET )
-# 249 "objlnglexer.ml"
+# 250 "objlnglexer.ml"
 
   | 17 ->
-# 75 "objlnglexer.mll"
+# 76 "objlnglexer.mll"
       ( DOT )
-# 254 "objlnglexer.ml"
+# 255 "objlnglexer.ml"
 
   | 18 ->
-# 77 "objlnglexer.mll"
+# 78 "objlnglexer.mll"
       ( COMMA )
-# 259 "objlnglexer.ml"
+# 260 "objlnglexer.ml"
 
   | 19 ->
-# 79 "objlnglexer.mll"
+# 80 "objlnglexer.mll"
       ( failwith ("Unknown character : " ^ (lexeme lexbuf)) )
-# 264 "objlnglexer.ml"
+# 265 "objlnglexer.ml"
 
   | 20 ->
-# 81 "objlnglexer.mll"
+# 82 "objlnglexer.mll"
       ( EOF )
-# 269 "objlnglexer.ml"
+# 270 "objlnglexer.ml"
 
   | __ocaml_lex_state -> lexbuf.Lexing.refill_buff lexbuf;
       __ocaml_lex_token_rec lexbuf __ocaml_lex_state
@@ -275,19 +276,19 @@ and comment lexbuf =
 and __ocaml_lex_comment_rec lexbuf __ocaml_lex_state =
   match Lexing.engine __ocaml_lex_tables __ocaml_lex_state lexbuf with
       | 0 ->
-# 85 "objlnglexer.mll"
+# 86 "objlnglexer.mll"
       ( () )
-# 281 "objlnglexer.ml"
+# 282 "objlnglexer.ml"
 
   | 1 ->
-# 87 "objlnglexer.mll"
+# 88 "objlnglexer.mll"
       ( comment lexbuf )
-# 286 "objlnglexer.ml"
+# 287 "objlnglexer.ml"
 
   | 2 ->
-# 89 "objlnglexer.mll"
+# 90 "objlnglexer.mll"
       ( failwith "unfinished comment" )
-# 291 "objlnglexer.ml"
+# 292 "objlnglexer.ml"
 
   | __ocaml_lex_state -> lexbuf.Lexing.refill_buff lexbuf;
       __ocaml_lex_comment_rec lexbuf __ocaml_lex_state

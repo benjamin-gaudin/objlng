@@ -12,7 +12,8 @@
         "while",    WHILE;
         "true",     BOOL true;
         "false",    BOOL false;
-        "var",      VAR;        
+        "var",      VAR;
+        "super",    SUPER;
         "function", FUNCTION;
         "class",    CLASS;
         "attribute", ATTRIBUTE;
@@ -28,14 +29,14 @@
     fun s ->
       try  Hashtbl.find h s
       with Not_found -> IDENT(s)
-        
+
 }
 
 let digit = ['0'-'9']
 let number = ['-']? digit+
 let alpha = ['a'-'z' 'A'-'Z']
 let ident = ['a'-'z' '_'] (alpha | '_' | digit)*
-  
+
 rule token = parse
   | ['\n']
       { new_line lexbuf; token lexbuf }
@@ -43,7 +44,7 @@ rule token = parse
       { token lexbuf }
   | "//" [^ '\n']* "\n"
       { new_line lexbuf; token lexbuf }
-  | "/*" 
+  | "/*"
       { comment lexbuf; token lexbuf }
   | number as n
       { CST(int_of_string n) }

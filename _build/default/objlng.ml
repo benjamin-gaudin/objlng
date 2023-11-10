@@ -4,7 +4,7 @@
 
 (* Types of SIMP values *)
 type typ =
-  | TInt 
+  | TInt
   | TBool
   | TClass of string (* class type, identified by its name *)
   | TArray of typ    (* array containing elements of the specified type *)
@@ -42,6 +42,7 @@ type 'a instruction =
   | Return  of 'a expression
   | Expr    of 'a expression
   | Write   of 'a mem * 'a expression (*   m = e;   *)
+  | Seq     of 'a sequence
 and 'a sequence = 'a instruction list
 
 (* Function definition *)

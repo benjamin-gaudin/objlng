@@ -160,6 +160,7 @@ let type_program (p: unit program): typ program =
           with
           | Not_found -> failwith "error Write"
           )
+      | Seq seq -> Seq (type_seq seq)
     in
     { fdef with code = type_seq fdef.code }
   in

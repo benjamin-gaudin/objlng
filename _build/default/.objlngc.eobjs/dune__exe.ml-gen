@@ -6,12 +6,6 @@ module Imp = Dune__exe__Imp
 (** @canonical Dune__exe.Imp2mips *)
 module Imp2mips = Dune__exe__Imp2mips
 
-(** @canonical Dune__exe.Impc *)
-module Impc = Dune__exe__Impc
-
-(** @canonical Dune__exe.Impi *)
-module Impi = Dune__exe__Impi
-
 (** @canonical Dune__exe.Imppp *)
 module Imppp = Dune__exe__Imppp
 
@@ -35,3 +29,6 @@ module Objlngparser = Dune__exe__Objlngparser
 
 (** @canonical Dune__exe.Objlngtyper *)
 module Objlngtyper = Dune__exe__Objlngtyper
+
+(** @canonical Dune__exe.Preprocessing *)
+module Preprocessing = Dune__exe__Preprocessing

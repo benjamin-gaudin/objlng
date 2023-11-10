@@ -15,55 +15,88 @@ main:
 	sw $ra, 0($sp)
 	addi $fp, $sp, 4
 	addi $sp, $sp, -16
+	li $t0, 1
+	la $t1, _0
+	sw $t0, 0($t1)
+	li $t0, 2
+	la $t1, _1
+	sw $t0, 0($t1)
 	li $t0, 16
 	move $a0, $t0
 	li $v0, 9
 	syscall
 	move $t0, $v0
+	la $t1, _2
+	sw $t0, 0($t1)
+	la $t0, _2
+	lw $t0, 0($t0)
+	subi $sp, $sp, 4
+	sw $t0, 0($sp)
+	la $t0, point_descr
+	lw $t1, 0($sp)
+	addi $sp, $sp, 4
+	sw $t0, 0($t1)
+	la $t6, _1
+	lw $t6, 0($t6)
+	subi $sp, $sp, 4
+	sw $t6, 0($sp)
+	la $t6, _0
+	lw $t6, 0($t6)
+	subi $sp, $sp, 4
+	sw $t6, 0($sp)
+	la $t6, _2
+	lw $t6, 0($t6)
+	subi $sp, $sp, 4
+	sw $t6, 0($sp)
+	jal point_constructor
+	addi $sp, $sp, 12
+	la $t0, _2
+	lw $t0, 0($t0)
 	sw $t0, -8($fp)
-	lw $t0, -8($fp)
-	subi $sp, $sp, 4
-	sw $t0, 0($sp)
-	la $t0, point_descr
-	lw $t1, 0($sp)
-	addi $sp, $sp, 4
+	li $t0, 5
+	la $t1, _3
 	sw $t0, 0($t1)
-	li $t6, 2
-	subi $sp, $sp, 4
-	sw $t6, 0($sp)
-	li $t6, 1
-	subi $sp, $sp, 4
-	sw $t6, 0($sp)
-	lw $t6, -8($fp)
-	subi $sp, $sp, 4
-	sw $t6, 0($sp)
-	jal point_constructor
-	addi $sp, $sp, 12
+	li $t0, -5
+	la $t1, _4
+	sw $t0, 0($t1)
 	li $t0, 16
 	move $a0, $t0
 	li $v0, 9
 	syscall
 	move $t0, $v0
-	sw $t0, -12($fp)
-	lw $t0, -12($fp)
+	la $t1, _5
+	sw $t0, 0($t1)
+	la $t0, _5
+	lw $t0, 0($t0)
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
 	la $t0, point_descr
 	lw $t1, 0($sp)
 	addi $sp, $sp, 4
 	sw $t0, 0($t1)
-	li $t6, -5
+	la $t6, _4
+	lw $t6, 0($t6)
 	subi $sp, $sp, 4
 	sw $t6, 0($sp)
-	li $t6, 5
+	la $t6, _3
+	lw $t6, 0($t6)
 	subi $sp, $sp, 4
 	sw $t6, 0($sp)
-	lw $t6, -12($fp)
+	la $t6, _5
+	lw $t6, 0($t6)
 	subi $sp, $sp, 4
 	sw $t6, 0($sp)
 	jal point_constructor
 	addi $sp, $sp, 12
-	li $t6, 48
+	la $t0, _5
+	lw $t0, 0($t0)
+	sw $t0, -12($fp)
+	lw $t0, -8($fp)
+	li $t0, 48
+	la $t1, _6
+	sw $t0, 0($t1)
+	la $t6, _6
+	lw $t6, 0($t6)
 	subi $sp, $sp, 4
 	sw $t6, 0($sp)
 	lw $t6, -8($fp)
@@ -76,28 +109,43 @@ main:
 	lw $t0, 0($t0)
 	jalr $t0
 	addi $sp, $sp, 8
+	la $t1, _7
+	sw $t0, 0($t1)
+	la $t0, _7
+	lw $t0, 0($t0)
 	sw $t0, -16($fp)
+	li $t0, 5
+	la $t1, _8
+	sw $t0, 0($t1)
 	li $t0, 16
 	move $a0, $t0
 	li $v0, 9
 	syscall
 	move $t0, $v0
-	sw $t0, -20($fp)
-	lw $t0, -20($fp)
+	la $t1, _9
+	sw $t0, 0($t1)
+	la $t0, _9
+	lw $t0, 0($t0)
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
 	la $t0, carre_descr
 	lw $t1, 0($sp)
 	addi $sp, $sp, 4
 	sw $t0, 0($t1)
-	li $t6, 5
+	la $t6, _8
+	lw $t6, 0($t6)
 	subi $sp, $sp, 4
 	sw $t6, 0($sp)
-	lw $t6, -20($fp)
+	la $t6, _9
+	lw $t6, 0($t6)
 	subi $sp, $sp, 4
 	sw $t6, 0($sp)
 	jal carre_constructor
 	addi $sp, $sp, 8
+	la $t0, _9
+	lw $t0, 0($t0)
+	sw $t0, -20($fp)
+	lw $t0, -12($fp)
 	lw $t6, -12($fp)
 	subi $sp, $sp, 4
 	sw $t6, 0($sp)
@@ -108,9 +156,14 @@ main:
 	lw $t0, 0($t0)
 	jalr $t0
 	addi $sp, $sp, 4
+	la $t1, _10
+	sw $t0, 0($t1)
+	la $t0, _10
+	lw $t0, 0($t0)
 	move $a0, $t0
 	li $v0, 11
 	syscall
+	lw $t0, -8($fp)
 	lw $t6, -8($fp)
 	subi $sp, $sp, 4
 	sw $t6, 0($sp)
@@ -121,9 +174,14 @@ main:
 	lw $t0, 0($t0)
 	jalr $t0
 	addi $sp, $sp, 4
+	la $t1, _11
+	sw $t0, 0($t1)
+	la $t0, _11
+	lw $t0, 0($t0)
 	move $a0, $t0
 	li $v0, 11
 	syscall
+	lw $t0, -20($fp)
 	lw $t6, -20($fp)
 	subi $sp, $sp, 4
 	sw $t6, 0($sp)
@@ -134,9 +192,14 @@ main:
 	lw $t0, 0($t0)
 	jalr $t0
 	addi $sp, $sp, 4
+	la $t1, _12
+	sw $t0, 0($t1)
+	la $t0, _12
+	lw $t0, 0($t0)
 	move $a0, $t0
 	li $v0, 11
 	syscall
+	lw $t0, -16($fp)
 	lw $t0, -16($fp)
 	move $a0, $t0
 	li $v0, 11
@@ -347,6 +410,32 @@ atoi_error:
 atoi_end:
 	jr $ra
 .data
+_6:
+	.word 0
+_7:
+	.word 0
+_11:
+	.word 0
+_3:
+	.word 0
+_4:
+	.word 0
+_1:
+	.word 0
+_0:
+	.word 0
+_9:
+	.word 0
+_10:
+	.word 0
+_5:
+	.word 0
+_8:
+	.word 0
+_2:
+	.word 0
+_12:
+	.word 0
 circle_descr:
 	.word 0
 	.word circle_get_z

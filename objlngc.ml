@@ -7,7 +7,10 @@ let () =
   let prog = Objlngparser.program Objlnglexer.token lb in
   close_in c;
   let tprog = Objlngtyper.type_program prog in
-  let imp = Objlng2imp.translate_program tprog in
+
+  let flatten = Preprocessing.preprocessing_program tprog in
+
+  let imp = Objlng2imp.translate_program flatten in
   let imp_output_file = (Filename.chop_suffix file ".obj") ^ ".imp" in
   let imp_out = open_out imp_output_file in
   let imp_outf = formatter_of_out_channel imp_out in

@@ -72,6 +72,7 @@ let translate_program (p: Objlng.typ Objlng.program) =
     | Return  e -> Return (tr_expr e)
     | Expr    e -> Expr (tr_expr e)
     | Write   (mem, e) -> Write (tr_mem mem, tr_expr e)
+    | Seq seq -> Seq (tr_seq seq)
   in
 
   let tr_class_methods cla =
