@@ -55,6 +55,11 @@ function main() {
   putchar(c);
 }
 
+function circle_constructor(_this, z) {
+  
+  *(_this + (4 * 1)) = z;
+}
+
 function circle_get_z(_this) {
   
   return((*(_this + (4 * 1)) + 97));
@@ -69,7 +74,7 @@ function point_constructor(_this, x, y) {
   
   *(_this + (4 * 2)) = x;
   *(_this + (4 * 3)) = y;
-  *(_this + (4 * 1)) = (x + y);
+  *(*(**_this + 4))(_this, (x + y));
 }
 
 function point_sum(_this, x) {
@@ -79,9 +84,7 @@ function point_sum(_this, x) {
 
 function carre_constructor(_this, x) {
   
-  *(_this + (4 * 2)) = x;
-  *(_this + (4 * 3)) = x;
-  *(_this + (4 * 1)) = x;
+  *(*(**_this + 12))(_this, x, x);
 }
 
 

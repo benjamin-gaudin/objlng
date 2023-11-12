@@ -259,6 +259,34 @@ main:
 	addi $sp, $sp, 4
 	li $t0, 0
 	jr $ra
+circle_constructor:
+	subi $sp, $sp, 4
+	sw $fp, 0($sp)
+	subi $sp, $sp, 4
+	sw $ra, 0($sp)
+	addi $fp, $sp, 4
+	addi $sp, $sp, 0
+	lw $t0, 4($fp)
+	li $t1, 4
+	li $t2, 1
+	mul $t1, $t1, $t2
+	add $t0, $t0, $t1
+	subi $sp, $sp, 4
+	sw $t0, 0($sp)
+#here 0
+	lw $t0, 8($fp)
+#here 1
+	lw $t1, 0($sp)
+	addi $sp, $sp, 4
+#here 2
+	sw $t0, 0($t1)
+	addi $sp, $fp, -4
+	lw $ra, 0($sp)
+	addi $sp, $sp, 4
+	lw $fp, 0($sp)
+	addi $sp, $sp, 4
+	li $t0, 0
+	jr $ra
 circle_get_z:
 	subi $sp, $sp, 4
 	sw $fp, 0($sp)
@@ -343,22 +371,27 @@ point_constructor:
 	addi $sp, $sp, 4
 #here 2
 	sw $t0, 0($t1)
-	lw $t0, 4($fp)
-	li $t1, 4
-	li $t2, 1
-	mul $t1, $t1, $t2
-	add $t0, $t0, $t1
-	subi $sp, $sp, 4
-	sw $t0, 0($sp)
-#here 0
+#Start tr_params DCall
 	lw $t0, 8($fp)
 	lw $t1, 12($fp)
 	add $t0, $t0, $t1
-#here 1
-	lw $t1, 0($sp)
-	addi $sp, $sp, 4
-#here 2
-	sw $t0, 0($t1)
+	subi $sp, $sp, 4
+	sw $t0, 0($sp)
+	lw $t0, 4($fp)
+	subi $sp, $sp, 4
+	sw $t0, 0($sp)
+#Start save DCall
+#End save DCall
+	lw $t0, 4($fp)
+	lw $t0, 0($t0)
+	lw $t0, 0($t0)
+	li $t1, 4
+	add $t0, $t0, $t1
+	lw $t0, 0($t0)
+	jalr $t0
+#Start restore DCall
+#End restore DCall
+	addi $sp, $sp, 8
 	addi $sp, $fp, -4
 	lw $ra, 0($sp)
 	addi $sp, $sp, 4
@@ -408,48 +441,28 @@ carre_constructor:
 	sw $ra, 0($sp)
 	addi $fp, $sp, 4
 	addi $sp, $sp, 0
-	lw $t0, 4($fp)
-	li $t1, 4
-	li $t2, 2
-	mul $t1, $t1, $t2
-	add $t0, $t0, $t1
+#Start tr_params DCall
+	lw $t0, 8($fp)
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
-#here 0
 	lw $t0, 8($fp)
-#here 1
-	lw $t1, 0($sp)
-	addi $sp, $sp, 4
-#here 2
-	sw $t0, 0($t1)
-	lw $t0, 4($fp)
-	li $t1, 4
-	li $t2, 3
-	mul $t1, $t1, $t2
-	add $t0, $t0, $t1
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
-#here 0
-	lw $t0, 8($fp)
-#here 1
-	lw $t1, 0($sp)
-	addi $sp, $sp, 4
-#here 2
-	sw $t0, 0($t1)
 	lw $t0, 4($fp)
-	li $t1, 4
-	li $t2, 1
-	mul $t1, $t1, $t2
-	add $t0, $t0, $t1
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
-#here 0
-	lw $t0, 8($fp)
-#here 1
-	lw $t1, 0($sp)
-	addi $sp, $sp, 4
-#here 2
-	sw $t0, 0($t1)
+#Start save DCall
+#End save DCall
+	lw $t0, 4($fp)
+	lw $t0, 0($t0)
+	lw $t0, 0($t0)
+	li $t1, 12
+	add $t0, $t0, $t1
+	lw $t0, 0($t0)
+	jalr $t0
+#Start restore DCall
+#End restore DCall
+	addi $sp, $sp, 12
 	addi $sp, $fp, -4
 	lw $ra, 0($sp)
 	addi $sp, $sp, 4
@@ -504,6 +517,7 @@ _12:
 	.word 0
 circle_descr:
 	.word 0
+	.word circle_constructor
 	.word circle_get_z
 	.word circle_test
 point_descr:

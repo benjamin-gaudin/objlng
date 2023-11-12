@@ -532,7 +532,7 @@ let _menhir_action_19 =
   fun () ->
     (
 # 128 "objlngparser.mly"
-        ( mk_expr () (This) )
+        ( mk_expr () (Super) )
 # 537 "objlngparser.ml"
      : (unit Objlng.expression))
 

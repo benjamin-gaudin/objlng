@@ -1,6 +1,10 @@
 class circle {
   attribute int z;
 
+  method void constructor(int z) {
+    this.z = z;
+  }
+
   method int get_z() {
     return this.z + 97;
   }
@@ -15,7 +19,7 @@ class point extends circle {
   method void constructor(int x, int y) {
     this.x = x;
     this.y = y;
-    this.z = x + y;
+    super.constructor(x + y);
   }
   method int sum(int x) {
     return (x+this.x+this.y);
@@ -24,9 +28,15 @@ class point extends circle {
 
 class carre extends point {
   method void constructor(int x) {
-    this.x = x;
-    this.y = x;
+    super.constructor(x, x);
     this.z = x;
+  }
+
+  method int get_z() {
+    return this.z + 98;
+  }
+  method int get_z_super() {
+    return super.get_z();
   }
 }
 
@@ -43,6 +53,7 @@ function void main() {
   putchar(p2.get_z());
   putchar(p.get_z());
   putchar(carre.get_z());
+  putchar(carre.get_z_super());
   putchar(c);
 }
 

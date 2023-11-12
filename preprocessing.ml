@@ -87,6 +87,7 @@ let preprocessing_program (p : typ program ) : typ program =
         (Seq [ tr_e1; Set (var_res, mk_expr e.annot (Read
          (Atr ( mk_expr e1.annot (Var var_e1), s))))], var_res)
     | This -> (Expr (mk_expr e.annot This), "_this")
+    | super -> (Expr (mk_expr e.annot Super), "super")
   in
 
   let rec tr_instr ( e : typ instruction) : typ instruction = match e with

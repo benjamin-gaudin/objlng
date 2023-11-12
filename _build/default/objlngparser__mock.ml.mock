@@ -741,7 +741,7 @@ and (xv_variable_decl, xv_typed_ident, xv_typ, xv_separated_nonempty_list_COMMA_
    : unit) (_startpos__1_ : Lexing.position) (_endpos__1_ : Lexing.position) (_startofs__1_ : int) (_endofs__1_ : int) (_loc__1_ : Lexing.position * Lexing.position) ->
     (
 # 128 "objlngparser.mly"
-        ( mk_expr () (This) )
+        ( mk_expr () (Super) )
 # 750 "objlngparser__mock.ml.mock"
      : 'tv_expression) in
   let _ = fun (_startpos : Lexing.position) (_endpos : Lexing.position) (_endpos__0_ : Lexing.position) (_symbolstartpos : Lexing.position) (_startofs : int) (_endofs : int) (_endofs__0_ : int) (_symbolstartofs : int) (_sloc : Lexing.position * Lexing.position) (_loc : Lexing.position * Lexing.position) (

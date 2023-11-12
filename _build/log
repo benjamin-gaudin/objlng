@@ -3,7 +3,7 @@
 # Shared cache: disabled
 # Workspace root: /home/john/Documents/T1/Compil/git2
 # Auto-detected concurrency: 4
-$ /home/john/.opam/default/bin/ocamlc.opt -config > /tmp/dune_e58c81_output
+$ /home/john/.opam/default/bin/ocamlc.opt -config > /tmp/dune_4c109f_output
 # Dune context:
 #  { name = "default"
 #  ; kind = "default"
@@ -101,8 +101,3 @@ $ /home/john/.opam/default/bin/ocamlc.opt -config > /tmp/dune_e58c81_output
 #      }
 #  ; instrument_with = []
 #  }
-$ (cd _build/default && /home/john/.opam/default/bin/ocamldep.opt -modules -impl linearscan.ml) > _build/default/.objlngc.eobjs/dune__exe__Linearscan.impl.d
-$ (cd _build/default && /home/john/.opam/default/bin/ocamlc.opt -g -bin-annot -I .objlngc.eobjs/byte -no-alias-deps -opaque -open Dune__exe -o .objlngc.eobjs/byte/dune__exe__Linearscan.cmo -c -impl linearscan.ml)
-$ (cd _build/default && /home/john/.opam/default/bin/ocamlopt.opt -g -I .objlngc.eobjs/byte -I .objlngc.eobjs/native -intf-suffix .ml -no-alias-deps -opaque -open Dune__exe -o .objlngc.eobjs/native/dune__exe__Linearscan.cmx -c -impl linearscan.ml)
-$ (cd _build/default && /home/john/.opam/default/bin/ocamlopt.opt -g -o objlngc.exe .objlngc.eobjs/native/dune__exe.cmx .objlngc.eobjs/native/dune__exe__Imp.cmx .objlngc.eobjs/native/dune__exe__Nimp.cmx .objlngc.eobjs/native/dune__exe__Liveness.cmx .objlngc.eobjs/native/dune__exe__Linearscan.cmx .objlngc.eobjs/native/dune__exe__Mips.cmx .objlngc.eobjs/native/dune__exe__Imp2mips.cmx .objlngc.eobjs/native/dune__exe__Imppp.cmx .objlngc.eobjs/native/dune__exe__Objlng.cmx .objlngc.eobjs/native/dune__exe__Objlng2imp.cmx .objlngc.eobjs/native/dune__exe__Objlngparser.cmx .objlngc.eobjs/native/dune__exe__Objlnglexer.cmx .objlngc.eobjs/native/dune__exe__Objlngtyper.cmx .objlngc.eobjs/native/dune__exe__Preprocessing.cmx .objlngc.eobjs/native/dune__exe__Objlngc.cmx)
-# Promoting "_build/default/objlngc.exe" to "objlngc.exe"

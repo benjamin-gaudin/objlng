@@ -125,7 +125,7 @@ expression:
 | NEW LBRACKET ty=typ COMMA e=expression RBRACKET { mk_expr () (NewTab(ty, e)) }
 | m=mem_access { mk_expr () (Read m) }
 | THIS { mk_expr () (This) }
-| SUPER { mk_expr () (This) } (* TODO *)
+| SUPER { mk_expr () (Super) } (* TODO *)
 ;
 
 %inline binop:

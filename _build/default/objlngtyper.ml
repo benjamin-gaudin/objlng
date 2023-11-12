@@ -136,6 +136,18 @@ let type_program (p: unit program): typ program =
       | This -> (try mk_expr (Env.find "_this" tenv) This with
                   | Not_found -> failwith "error this"
                 )
+      | Super -> let cla_this = match Env.find "_this" tenv with
+                                | TClass s -> s
+                                | _ -> failwith "error super"
+                 in
+                 let cla_def_this =
+                   List.find (fun x -> x.name = cla_this) p.classes
+                 in
+                 let cla_super =
+                   List.find (fun x -> x.name = Option.get(cla_def_this.parent))
+                   p.classes
+                 in
+                 mk_expr (TClass (cla_super.name)) Super
     in
 
     (* type instructions *)

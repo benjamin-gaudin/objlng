@@ -35,6 +35,12 @@ let translate_program (p: Objlng.typ Objlng.program) =
     | Var x  -> Var x
     | Binop(op, e1, e2) -> Binop(tr_op op, tr_expr e1, tr_expr e2)
     | Call (f,e) -> Call (f, List.map tr_expr e)
+    | MCall (e1, method_name, args) when e1.expr = Super ->
+       let cla_name = get_name e1 in
+       let cla_def = find_class_def cla_name in
+       let index_method = find_index_method method_name cla_def.methods in
+       DCall ((Deref (Binop (Add, (Deref (tr_expr e1)), (Cst (4 * (index_method + 1)))))),
+              Var("_this") :: (List.map tr_expr (args)))
     | MCall (e1, method_name, args) ->
        let cla_name = get_name e1 in
        let cla_def = find_class_def cla_name in
@@ -44,7 +50,9 @@ let translate_program (p: Objlng.typ Objlng.program) =
     | NewTab (typ, e) -> Alloc (Binop (Mul, tr_expr e, Cst 4))
     | Read mem -> Deref (tr_mem mem)
     | This -> Var "_this"
-    | _ -> assert false
+    | Super -> Deref (Var "_this")
+    | _ -> assert false (* New *)
+
   and tr_mem = function
     | Arr (e1, e2) -> Imp.array_offset (tr_expr e1) (tr_expr e2)
     | Atr (e1, s) ->
