@@ -15,6 +15,14 @@ main:
 	sw $ra, 0($sp)
 	addi $fp, $sp, 4
 	addi $sp, $sp, -16
+	subi $sp, $sp, 4
+	sw $s0, 0($sp)
+	subi $sp, $sp, 4
+	sw $s1, 0($sp)
+	subi $sp, $sp, 4
+	sw $s2, 0($sp)
+	subi $sp, $sp, 4
+	sw $s3, 0($sp)
 	li $t0, 1
 	la $t1, _0
 	sw $t0, 0($t1)
@@ -32,27 +40,35 @@ main:
 	lw $t0, 0($t0)
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
+#here 0
 	la $t0, point_descr
+#here 1
 	lw $t1, 0($sp)
 	addi $sp, $sp, 4
+#here 2
 	sw $t0, 0($t1)
-	la $t6, _1
-	lw $t6, 0($t6)
+#Start tr_params Call
+	la $t0, _1
+	lw $t0, 0($t0)
 	subi $sp, $sp, 4
-	sw $t6, 0($sp)
-	la $t6, _0
-	lw $t6, 0($t6)
+	sw $t0, 0($sp)
+	la $t0, _0
+	lw $t0, 0($t0)
 	subi $sp, $sp, 4
-	sw $t6, 0($sp)
-	la $t6, _2
-	lw $t6, 0($t6)
+	sw $t0, 0($sp)
+	la $t0, _2
+	lw $t0, 0($t0)
 	subi $sp, $sp, 4
-	sw $t6, 0($sp)
+	sw $t0, 0($sp)
+#Start save Call
+#End save Call
 	jal point_constructor
+#Start restore Call
+#End restore Call
 	addi $sp, $sp, 12
 	la $t0, _2
 	lw $t0, 0($t0)
-	sw $t0, -8($fp)
+	move $s0, $t0
 	li $t0, 5
 	la $t1, _3
 	sw $t0, 0($t1)
@@ -70,50 +86,63 @@ main:
 	lw $t0, 0($t0)
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
+#here 0
 	la $t0, point_descr
+#here 1
 	lw $t1, 0($sp)
 	addi $sp, $sp, 4
+#here 2
 	sw $t0, 0($t1)
-	la $t6, _4
-	lw $t6, 0($t6)
+#Start tr_params Call
+	la $t0, _4
+	lw $t0, 0($t0)
 	subi $sp, $sp, 4
-	sw $t6, 0($sp)
-	la $t6, _3
-	lw $t6, 0($t6)
+	sw $t0, 0($sp)
+	la $t0, _3
+	lw $t0, 0($t0)
 	subi $sp, $sp, 4
-	sw $t6, 0($sp)
-	la $t6, _5
-	lw $t6, 0($t6)
+	sw $t0, 0($sp)
+	la $t0, _5
+	lw $t0, 0($t0)
 	subi $sp, $sp, 4
-	sw $t6, 0($sp)
+	sw $t0, 0($sp)
+#Start save Call
+#End save Call
 	jal point_constructor
+#Start restore Call
+#End restore Call
 	addi $sp, $sp, 12
 	la $t0, _5
 	lw $t0, 0($t0)
-	sw $t0, -12($fp)
-	lw $t0, -8($fp)
+	move $s1, $t0
+	move $t0, $s0
 	li $t0, 48
 	la $t1, _6
 	sw $t0, 0($t1)
-	la $t6, _6
-	lw $t6, 0($t6)
+#Start tr_params DCall
+	la $t0, _6
+	lw $t0, 0($t0)
 	subi $sp, $sp, 4
-	sw $t6, 0($sp)
-	lw $t6, -8($fp)
+	sw $t0, 0($sp)
+	move $t0, $s0
 	subi $sp, $sp, 4
-	sw $t6, 0($sp)
-	li $t0, 16
-	lw $t1, -8($fp)
-	lw $t1, 0($t1)
-	add $t0, $t1, $t0
+	sw $t0, 0($sp)
+#Start save DCall
+#End save DCall
+	move $t0, $s0
+	lw $t0, 0($t0)
+	li $t1, 16
+	add $t0, $t0, $t1
 	lw $t0, 0($t0)
 	jalr $t0
+#Start restore DCall
+#End restore DCall
 	addi $sp, $sp, 8
 	la $t1, _7
 	sw $t0, 0($t1)
 	la $t0, _7
 	lw $t0, 0($t0)
-	sw $t0, -16($fp)
+	move $s2, $t0
 	li $t0, 5
 	la $t1, _8
 	sw $t0, 0($t1)
@@ -128,33 +157,46 @@ main:
 	lw $t0, 0($t0)
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
+#here 0
 	la $t0, carre_descr
+#here 1
 	lw $t1, 0($sp)
 	addi $sp, $sp, 4
+#here 2
 	sw $t0, 0($t1)
-	la $t6, _8
-	lw $t6, 0($t6)
+#Start tr_params Call
+	la $t0, _8
+	lw $t0, 0($t0)
 	subi $sp, $sp, 4
-	sw $t6, 0($sp)
-	la $t6, _9
-	lw $t6, 0($t6)
+	sw $t0, 0($sp)
+	la $t0, _9
+	lw $t0, 0($t0)
 	subi $sp, $sp, 4
-	sw $t6, 0($sp)
+	sw $t0, 0($sp)
+#Start save Call
+#End save Call
 	jal carre_constructor
+#Start restore Call
+#End restore Call
 	addi $sp, $sp, 8
 	la $t0, _9
 	lw $t0, 0($t0)
-	sw $t0, -20($fp)
-	lw $t0, -12($fp)
-	lw $t6, -12($fp)
+	move $s3, $t0
+	move $t0, $s1
+#Start tr_params DCall
+	move $t0, $s1
 	subi $sp, $sp, 4
-	sw $t6, 0($sp)
-	li $t0, 4
-	lw $t1, -12($fp)
-	lw $t1, 0($t1)
-	add $t0, $t1, $t0
+	sw $t0, 0($sp)
+#Start save DCall
+#End save DCall
+	move $t0, $s1
+	lw $t0, 0($t0)
+	li $t1, 4
+	add $t0, $t0, $t1
 	lw $t0, 0($t0)
 	jalr $t0
+#Start restore DCall
+#End restore DCall
 	addi $sp, $sp, 4
 	la $t1, _10
 	sw $t0, 0($t1)
@@ -163,16 +205,21 @@ main:
 	move $a0, $t0
 	li $v0, 11
 	syscall
-	lw $t0, -8($fp)
-	lw $t6, -8($fp)
+	move $t0, $s0
+#Start tr_params DCall
+	move $t0, $s0
 	subi $sp, $sp, 4
-	sw $t6, 0($sp)
-	li $t0, 4
-	lw $t1, -8($fp)
-	lw $t1, 0($t1)
-	add $t0, $t1, $t0
+	sw $t0, 0($sp)
+#Start save DCall
+#End save DCall
+	move $t0, $s0
+	lw $t0, 0($t0)
+	li $t1, 4
+	add $t0, $t0, $t1
 	lw $t0, 0($t0)
 	jalr $t0
+#Start restore DCall
+#End restore DCall
 	addi $sp, $sp, 4
 	la $t1, _11
 	sw $t0, 0($t1)
@@ -181,16 +228,21 @@ main:
 	move $a0, $t0
 	li $v0, 11
 	syscall
-	lw $t0, -20($fp)
-	lw $t6, -20($fp)
+	move $t0, $s3
+#Start tr_params DCall
+	move $t0, $s3
 	subi $sp, $sp, 4
-	sw $t6, 0($sp)
-	li $t0, 4
-	lw $t1, -20($fp)
-	lw $t1, 0($t1)
-	add $t0, $t1, $t0
+	sw $t0, 0($sp)
+#Start save DCall
+#End save DCall
+	move $t0, $s3
+	lw $t0, 0($t0)
+	li $t1, 4
+	add $t0, $t0, $t1
 	lw $t0, 0($t0)
 	jalr $t0
+#Start restore DCall
+#End restore DCall
 	addi $sp, $sp, 4
 	la $t1, _12
 	sw $t0, 0($t1)
@@ -199,17 +251,25 @@ main:
 	move $a0, $t0
 	li $v0, 11
 	syscall
-	lw $t0, -16($fp)
-	lw $t0, -16($fp)
+	move $t0, $s2
+	move $t0, $s2
 	move $a0, $t0
 	li $v0, 11
 	syscall
-	li $t0, 0
+	lw $s3, 0($sp)
+	addi $sp, $sp, 4
+	lw $s2, 0($sp)
+	addi $sp, $sp, 4
+	lw $s1, 0($sp)
+	addi $sp, $sp, 4
+	lw $s0, 0($sp)
+	addi $sp, $sp, 4
 	addi $sp, $fp, -4
 	lw $ra, 0($sp)
 	addi $sp, $sp, 4
 	lw $fp, 0($sp)
 	addi $sp, $sp, 4
+	li $t0, 0
 	jr $ra
 circle_get_z:
 	subi $sp, $sp, 4
@@ -218,26 +278,26 @@ circle_get_z:
 	sw $ra, 0($sp)
 	addi $fp, $sp, 4
 	addi $sp, $sp, 0
-	li $t0, 97
-	li $t1, 1
-	li $t2, 4
-	mul $t1, $t2, $t1
-	lw $t2, 4($fp)
-	add $t1, $t2, $t1
-	lw $t1, 0($t1)
-	add $t0, $t1, $t0
+	lw $t0, 4($fp)
+	li $t1, 4
+	li $t2, 1
+	mul $t1, $t1, $t2
+	add $t0, $t0, $t1
+	lw $t0, 0($t0)
+	li $t1, 97
+	add $t0, $t0, $t1
 	addi $sp, $fp, -4
 	lw $ra, 0($sp)
 	addi $sp, $sp, 4
 	lw $fp, 0($sp)
 	addi $sp, $sp, 4
 	jr $ra
-	li $t0, 0
 	addi $sp, $fp, -4
 	lw $ra, 0($sp)
 	addi $sp, $sp, 4
 	lw $fp, 0($sp)
 	addi $sp, $sp, 4
+	li $t0, 0
 	jr $ra
 circle_test:
 	subi $sp, $sp, 4
@@ -253,12 +313,12 @@ circle_test:
 	lw $fp, 0($sp)
 	addi $sp, $sp, 4
 	jr $ra
-	li $t0, 0
 	addi $sp, $fp, -4
 	lw $ra, 0($sp)
 	addi $sp, $sp, 4
 	lw $fp, 0($sp)
 	addi $sp, $sp, 4
+	li $t0, 0
 	jr $ra
 point_constructor:
 	subi $sp, $sp, 4
@@ -267,47 +327,56 @@ point_constructor:
 	sw $ra, 0($sp)
 	addi $fp, $sp, 4
 	addi $sp, $sp, 0
-	li $t0, 2
+	lw $t0, 4($fp)
 	li $t1, 4
-	mul $t0, $t1, $t0
-	lw $t1, 4($fp)
-	add $t0, $t1, $t0
+	li $t2, 2
+	mul $t1, $t1, $t2
+	add $t0, $t0, $t1
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
+#here 0
 	lw $t0, 8($fp)
+#here 1
 	lw $t1, 0($sp)
 	addi $sp, $sp, 4
+#here 2
 	sw $t0, 0($t1)
-	li $t0, 3
+	lw $t0, 4($fp)
 	li $t1, 4
-	mul $t0, $t1, $t0
-	lw $t1, 4($fp)
-	add $t0, $t1, $t0
+	li $t2, 3
+	mul $t1, $t1, $t2
+	add $t0, $t0, $t1
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
+#here 0
 	lw $t0, 12($fp)
+#here 1
 	lw $t1, 0($sp)
 	addi $sp, $sp, 4
+#here 2
 	sw $t0, 0($t1)
-	li $t0, 1
+	lw $t0, 4($fp)
 	li $t1, 4
-	mul $t0, $t1, $t0
-	lw $t1, 4($fp)
-	add $t0, $t1, $t0
+	li $t2, 1
+	mul $t1, $t1, $t2
+	add $t0, $t0, $t1
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
-	lw $t0, 12($fp)
-	lw $t1, 8($fp)
-	add $t0, $t1, $t0
+#here 0
+	lw $t0, 8($fp)
+	lw $t1, 12($fp)
+	add $t0, $t0, $t1
+#here 1
 	lw $t1, 0($sp)
 	addi $sp, $sp, 4
+#here 2
 	sw $t0, 0($t1)
-	li $t0, 0
 	addi $sp, $fp, -4
 	lw $ra, 0($sp)
 	addi $sp, $sp, 4
 	lw $fp, 0($sp)
 	addi $sp, $sp, 4
+	li $t0, 0
 	jr $ra
 point_sum:
 	subi $sp, $sp, 4
@@ -316,33 +385,33 @@ point_sum:
 	sw $ra, 0($sp)
 	addi $fp, $sp, 4
 	addi $sp, $sp, 0
-	li $t0, 3
-	li $t1, 4
-	mul $t0, $t1, $t0
+	lw $t0, 8($fp)
 	lw $t1, 4($fp)
-	add $t0, $t1, $t0
-	lw $t0, 0($t0)
-	li $t1, 2
 	li $t2, 4
-	mul $t1, $t2, $t1
-	lw $t2, 4($fp)
-	add $t1, $t2, $t1
+	li $t3, 2
+	mul $t2, $t2, $t3
+	add $t1, $t1, $t2
 	lw $t1, 0($t1)
-	lw $t2, 8($fp)
-	add $t1, $t2, $t1
-	add $t0, $t1, $t0
+	add $t0, $t0, $t1
+	lw $t1, 4($fp)
+	li $t2, 4
+	li $t3, 3
+	mul $t2, $t2, $t3
+	add $t1, $t1, $t2
+	lw $t1, 0($t1)
+	add $t0, $t0, $t1
 	addi $sp, $fp, -4
 	lw $ra, 0($sp)
 	addi $sp, $sp, 4
 	lw $fp, 0($sp)
 	addi $sp, $sp, 4
 	jr $ra
-	li $t0, 0
 	addi $sp, $fp, -4
 	lw $ra, 0($sp)
 	addi $sp, $sp, 4
 	lw $fp, 0($sp)
 	addi $sp, $sp, 4
+	li $t0, 0
 	jr $ra
 carre_constructor:
 	subi $sp, $sp, 4
@@ -351,45 +420,54 @@ carre_constructor:
 	sw $ra, 0($sp)
 	addi $fp, $sp, 4
 	addi $sp, $sp, 0
-	li $t0, 2
+	lw $t0, 4($fp)
 	li $t1, 4
-	mul $t0, $t1, $t0
-	lw $t1, 4($fp)
-	add $t0, $t1, $t0
+	li $t2, 2
+	mul $t1, $t1, $t2
+	add $t0, $t0, $t1
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
+#here 0
 	lw $t0, 8($fp)
+#here 1
 	lw $t1, 0($sp)
 	addi $sp, $sp, 4
+#here 2
 	sw $t0, 0($t1)
-	li $t0, 3
+	lw $t0, 4($fp)
 	li $t1, 4
-	mul $t0, $t1, $t0
-	lw $t1, 4($fp)
-	add $t0, $t1, $t0
+	li $t2, 3
+	mul $t1, $t1, $t2
+	add $t0, $t0, $t1
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
+#here 0
 	lw $t0, 8($fp)
+#here 1
 	lw $t1, 0($sp)
 	addi $sp, $sp, 4
+#here 2
 	sw $t0, 0($t1)
-	li $t0, 1
+	lw $t0, 4($fp)
 	li $t1, 4
-	mul $t0, $t1, $t0
-	lw $t1, 4($fp)
-	add $t0, $t1, $t0
+	li $t2, 1
+	mul $t1, $t1, $t2
+	add $t0, $t0, $t1
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
+#here 0
 	lw $t0, 8($fp)
+#here 1
 	lw $t1, 0($sp)
 	addi $sp, $sp, 4
+#here 2
 	sw $t0, 0($t1)
-	li $t0, 0
 	addi $sp, $fp, -4
 	lw $ra, 0($sp)
 	addi $sp, $sp, 4
 	lw $fp, 0($sp)
 	addi $sp, $sp, 4
+	li $t0, 0
 	jr $ra
 #built-in atoi
 atoi:

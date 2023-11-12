@@ -3,7 +3,7 @@
 # Shared cache: disabled
 # Workspace root: /home/john/Documents/T1/Compil/git2
 # Auto-detected concurrency: 4
-$ /home/john/.opam/default/bin/ocamlc.opt -config > /tmp/dune_7e7b49_output
+$ /home/john/.opam/default/bin/ocamlc.opt -config > /tmp/dune_7d9c57_output
 # Dune context:
 #  { name = "default"
 #  ; kind = "default"
@@ -101,38 +101,3 @@ $ /home/john/.opam/default/bin/ocamlc.opt -config > /tmp/dune_7e7b49_output
 #      }
 #  ; instrument_with = []
 #  }
-$ (cd _build/default && /home/john/.opam/default/bin/ocamlc.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62-40 -strict-sequence -strict-formats -short-paths -keep-locs -w -49 -nopervasives -nostdlib -g -bin-annot -I .objlngc.eobjs/byte -no-alias-deps -opaque -o .objlngc.eobjs/byte/dune__exe.cmo -c -impl .objlngc.eobjs/dune__exe.ml-gen)
-$ (cd _build/default && /home/john/.opam/default/bin/ocamlc.opt -g -bin-annot -I .objlngc.eobjs/byte -no-alias-deps -opaque -open Dune__exe -o .objlngc.eobjs/byte/dune__exe__Objlng.cmo -c -impl objlng.ml)
-$ (cd _build/.sandbox/a99f28cd5d935fcfeed03dc16f5dbb60/default && /home/john/.opam/default/bin/ocamlc.opt -g -I .objlngc.eobjs/byte -open Dune__exe -short-paths -i -impl objlngparser__mock.ml.mock) > _build/.sandbox/a99f28cd5d935fcfeed03dc16f5dbb60/default/objlngparser__mock.mli.inferred
-$ (cd _build/default && /home/john/.opam/default/bin/ocamlc.opt -g -bin-annot -I .objlngc.eobjs/byte -no-alias-deps -opaque -open Dune__exe -o .objlngc.eobjs/byte/dune__exe__Imp.cmo -c -impl imp.ml)
-$ (cd _build/default && /home/john/.opam/default/bin/ocamlopt.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62-40 -strict-sequence -strict-formats -short-paths -keep-locs -w -49 -nopervasives -nostdlib -g -I .objlngc.eobjs/byte -I .objlngc.eobjs/native -intf-suffix .ml-gen -no-alias-deps -opaque -o .objlngc.eobjs/native/dune__exe.cmx -c -impl .objlngc.eobjs/dune__exe.ml-gen)
-$ (cd _build/default && /home/john/.opam/default/bin/ocamlopt.opt -g -I .objlngc.eobjs/byte -I .objlngc.eobjs/native -intf-suffix .ml -no-alias-deps -opaque -open Dune__exe -o .objlngc.eobjs/native/dune__exe__Objlng.cmx -c -impl objlng.ml)
-$ (cd _build/default && /home/john/.opam/default/bin/ocamlc.opt -g -bin-annot -I .objlngc.eobjs/byte -no-alias-deps -opaque -open Dune__exe -o .objlngc.eobjs/byte/dune__exe__Objlngparser.cmi -c -intf objlngparser.mli)
-$ (cd _build/default && /home/john/.opam/default/bin/ocamlc.opt -g -bin-annot -I .objlngc.eobjs/byte -no-alias-deps -opaque -open Dune__exe -o .objlngc.eobjs/byte/dune__exe__Objlngtyper.cmo -c -impl objlngtyper.ml)
-$ (cd _build/default && /home/john/.opam/default/bin/ocamlopt.opt -g -I .objlngc.eobjs/byte -I .objlngc.eobjs/native -intf-suffix .ml -no-alias-deps -opaque -open Dune__exe -o .objlngc.eobjs/native/dune__exe__Imp.cmx -c -impl imp.ml)
-$ (cd _build/default && /home/john/.opam/default/bin/ocamlc.opt -g -bin-annot -I .objlngc.eobjs/byte -no-alias-deps -opaque -open Dune__exe -o .objlngc.eobjs/byte/dune__exe__Preprocessing.cmo -c -impl preprocessing.ml)
-$ (cd _build/default && /home/john/.opam/default/bin/ocamlc.opt -g -bin-annot -I .objlngc.eobjs/byte -no-alias-deps -opaque -open Dune__exe -o .objlngc.eobjs/byte/dune__exe__Mips.cmo -c -impl mips.ml)
-$ (cd _build/default && /home/john/.opam/default/bin/ocamlc.opt -g -bin-annot -I .objlngc.eobjs/byte -no-alias-deps -opaque -open Dune__exe -o .objlngc.eobjs/byte/dune__exe__Objlnglexer.cmo -c -impl objlnglexer.ml)
-$ (cd _build/default && /home/john/.opam/default/bin/ocamlc.opt -g -bin-annot -I .objlngc.eobjs/byte -no-alias-deps -opaque -open Dune__exe -o .objlngc.eobjs/byte/dune__exe__Objlng2imp.cmo -c -impl objlng2imp.ml)
-$ (cd _build/default && /home/john/.opam/default/bin/ocamlc.opt -g -bin-annot -I .objlngc.eobjs/byte -no-alias-deps -opaque -open Dune__exe -o .objlngc.eobjs/byte/dune__exe__Imppp.cmo -c -impl imppp.ml)
-$ (cd _build/default && /home/john/.opam/default/bin/ocamlopt.opt -g -I .objlngc.eobjs/byte -I .objlngc.eobjs/native -intf-suffix .ml -no-alias-deps -opaque -open Dune__exe -o .objlngc.eobjs/native/dune__exe__Objlngtyper.cmx -c -impl objlngtyper.ml)
-$ (cd _build/default && /home/john/.opam/default/bin/ocamlopt.opt -g -I .objlngc.eobjs/byte -I .objlngc.eobjs/native -intf-suffix .ml -no-alias-deps -opaque -open Dune__exe -o .objlngc.eobjs/native/dune__exe__Preprocessing.cmx -c -impl preprocessing.ml)
-$ (cd _build/default && /home/john/.opam/default/bin/ocamlopt.opt -g -I .objlngc.eobjs/byte -I .objlngc.eobjs/native -intf-suffix .ml -no-alias-deps -opaque -open Dune__exe -o .objlngc.eobjs/native/dune__exe__Mips.cmx -c -impl mips.ml)
-$ (cd _build/default && /home/john/.opam/default/bin/ocamlopt.opt -g -I .objlngc.eobjs/byte -I .objlngc.eobjs/native -intf-suffix .ml -no-alias-deps -opaque -open Dune__exe -o .objlngc.eobjs/native/dune__exe__Objlnglexer.cmx -c -impl objlnglexer.ml)
-$ (cd _build/default && /home/john/.opam/default/bin/ocamlc.opt -g -bin-annot -I .objlngc.eobjs/byte -no-alias-deps -opaque -open Dune__exe -o .objlngc.eobjs/byte/dune__exe__Imp2mips.cmo -c -impl imp2mips.ml)
-> File "imp2mips.ml", line 241, characters 14-30:
-> 241 |       if not (String.ends_with "_descr" id) then
->                     ^^^^^^^^^^^^^^^^
-> Warning 6 [labels-omitted]: label suffix was omitted in the application of this function.
-$ (cd _build/default && /home/john/.opam/default/bin/ocamlopt.opt -g -I .objlngc.eobjs/byte -I .objlngc.eobjs/native -intf-suffix .ml -no-alias-deps -opaque -open Dune__exe -o .objlngc.eobjs/native/dune__exe__Objlng2imp.cmx -c -impl objlng2imp.ml)
-$ (cd _build/default && /home/john/.opam/default/bin/ocamlopt.opt -g -I .objlngc.eobjs/byte -I .objlngc.eobjs/native -intf-suffix .ml -no-alias-deps -opaque -open Dune__exe -o .objlngc.eobjs/native/dune__exe__Imppp.cmx -c -impl imppp.ml)
-$ (cd _build/default && /home/john/.opam/default/bin/ocamlc.opt -g -bin-annot -I .objlngc.eobjs/byte -no-alias-deps -opaque -open Dune__exe -o .objlngc.eobjs/byte/dune__exe__Objlngc.cmo -c -impl objlngc.ml)
-$ (cd _build/default && /home/john/.opam/default/bin/ocamlopt.opt -g -I .objlngc.eobjs/byte -I .objlngc.eobjs/native -intf-suffix .ml -no-alias-deps -opaque -open Dune__exe -o .objlngc.eobjs/native/dune__exe__Objlngc.cmx -c -impl objlngc.ml)
-$ (cd _build/default && /home/john/.opam/default/bin/ocamlopt.opt -g -I .objlngc.eobjs/byte -I .objlngc.eobjs/native -intf-suffix .ml -no-alias-deps -opaque -open Dune__exe -o .objlngc.eobjs/native/dune__exe__Imp2mips.cmx -c -impl imp2mips.ml)
-> File "imp2mips.ml", line 241, characters 14-30:
-> 241 |       if not (String.ends_with "_descr" id) then
->                     ^^^^^^^^^^^^^^^^
-> Warning 6 [labels-omitted]: label suffix was omitted in the application of this function.
-$ (cd _build/default && /home/john/.opam/default/bin/ocamlopt.opt -g -I .objlngc.eobjs/byte -I .objlngc.eobjs/native -intf-suffix .ml -no-alias-deps -opaque -open Dune__exe -o .objlngc.eobjs/native/dune__exe__Objlngparser.cmx -c -impl objlngparser.ml)
-$ (cd _build/default && /home/john/.opam/default/bin/ocamlopt.opt -g -o objlngc.exe .objlngc.eobjs/native/dune__exe.cmx .objlngc.eobjs/native/dune__exe__Imp.cmx .objlngc.eobjs/native/dune__exe__Mips.cmx .objlngc.eobjs/native/dune__exe__Imp2mips.cmx .objlngc.eobjs/native/dune__exe__Imppp.cmx .objlngc.eobjs/native/dune__exe__Objlng.cmx .objlngc.eobjs/native/dune__exe__Objlng2imp.cmx .objlngc.eobjs/native/dune__exe__Objlngparser.cmx .objlngc.eobjs/native/dune__exe__Objlnglexer.cmx .objlngc.eobjs/native/dune__exe__Objlngtyper.cmx .objlngc.eobjs/native/dune__exe__Preprocessing.cmx .objlngc.eobjs/native/dune__exe__Objlngc.cmx)
-# Promoting "_build/default/objlngc.exe" to "objlngc.exe"

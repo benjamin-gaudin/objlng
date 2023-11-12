@@ -104,9 +104,6 @@ let translate_program (p: Objlng.typ Objlng.program) =
 
   let class_descrs = List.map (fun (cla_def :'a Objlng.class_def) ->
     { descr_name = cla_def.name ^ "_descr";
-    (*
-     methods = List.map (fun (m : 'a function_def) -> cla_def.name ^"_"^ m.name) cla_def.methods;
-     *)
      methods = List.map (fun (m : 'a function_def) -> m.name) cla_def.methods;
      parent = if Option.is_some cla_def.parent then
                 Some (Option.get cla_def.parent ^ "_descr")

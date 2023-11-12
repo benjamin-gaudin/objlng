@@ -4,13 +4,13 @@ class point {
   method void constructor(int x) {
     this.x = x;
   }
-  
+
 }
 
-class cercle extends point {
+class circle extends point {
   attribute int y;
   attribute int z;
-  
+
   method void constructor(int x, int y) {
     this.x = x;
     this.y = y;
@@ -25,9 +25,9 @@ class cercle extends point {
 function void main() {
   var point a1;
   var circle b1;
-  
+
   b1 = new circle(0,1);
   putchar(b1.get_x());
-  
+
 }
 

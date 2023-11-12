@@ -1,0 +1,12 @@
+var _0;
+
+function main() {
+  var a;
+  
+  _0 = 5617;
+  a = _0;
+  a;
+  a;
+}
+
+

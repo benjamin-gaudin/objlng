@@ -14,13 +14,86 @@ main:
 	subi $sp, $sp, 4
 	sw $ra, 0($sp)
 	addi $fp, $sp, 4
-	addi $sp, $sp, -4
+	addi $sp, $sp, -8
+	subi $sp, $sp, 4
+	sw $s0, 0($sp)
 	li $t0, 0
+	la $t1, _0
+	sw $t0, 0($t1)
+	li $t0, 1
+	la $t1, _1
+	sw $t0, 0($t1)
+	li $t0, 16
+	move $a0, $t0
+	li $v0, 9
+	syscall
+	move $t0, $v0
+	la $t1, _2
+	sw $t0, 0($t1)
+	la $t0, _2
+	lw $t0, 0($t0)
+	subi $sp, $sp, 4
+	sw $t0, 0($sp)
+#here 0
+	la $t0, circle_descr
+#here 1
+	lw $t1, 0($sp)
+	addi $sp, $sp, 4
+#here 2
+	sw $t0, 0($t1)
+#Start tr_params Call
+	la $t0, _1
+	lw $t0, 0($t0)
+	subi $sp, $sp, 4
+	sw $t0, 0($sp)
+	la $t0, _0
+	lw $t0, 0($t0)
+	subi $sp, $sp, 4
+	sw $t0, 0($sp)
+	la $t0, _2
+	lw $t0, 0($t0)
+	subi $sp, $sp, 4
+	sw $t0, 0($sp)
+#Start save Call
+#End save Call
+	jal circle_constructor
+#Start restore Call
+#End restore Call
+	addi $sp, $sp, 12
+	la $t0, _2
+	lw $t0, 0($t0)
+	move $s0, $t0
+	move $t0, $s0
+	move $t0, $s0
+	lw $t0, 0($t0)
+	li $t1, 8
+	add $t0, $t0, $t1
+	lw $t0, 0($t0)
+#Start tr_params DCall
+	move $t0, $s0
+	subi $sp, $sp, 4
+	sw $t0, 0($sp)
+#Start save DCall
+#End save DCall
+	jalr $t0
+#Start restore DCall
+#End restore DCall
+	addi $sp, $sp, 4
+	la $t1, _3
+	sw $t0, 0($t1)
+	la $t0, _3
+	lw $t0, 0($t0)
+	move $a0, $t0
+	li $v0, 11
+	syscall
+	lw $s0, 0($sp)
+	addi $sp, $sp, 4
 	addi $sp, $fp, -4
 	lw $ra, 0($sp)
 	addi $sp, $sp, 4
 	lw $fp, 0($sp)
 	addi $sp, $sp, 4
+	li $t0, 0
 	jr $ra
 point_constructor:
 	subi $sp, $sp, 4
@@ -29,23 +102,88 @@ point_constructor:
 	sw $ra, 0($sp)
 	addi $fp, $sp, 4
 	addi $sp, $sp, 0
-	li $t0, 1
+	lw $t0, 4($fp)
 	li $t1, 4
-	mul $t0, $t1, $t0
-	lw $t1, 4($fp)
-	add $t0, $t1, $t0
+	li $t2, 1
+	mul $t1, $t1, $t2
+	add $t0, $t0, $t1
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
+#here 0
 	lw $t0, 8($fp)
+#here 1
 	lw $t1, 0($sp)
 	addi $sp, $sp, 4
+#here 2
 	sw $t0, 0($t1)
-	li $t0, 0
 	addi $sp, $fp, -4
 	lw $ra, 0($sp)
 	addi $sp, $sp, 4
 	lw $fp, 0($sp)
 	addi $sp, $sp, 4
+	li $t0, 0
+	jr $ra
+circle_constructor:
+	subi $sp, $sp, 4
+	sw $fp, 0($sp)
+	subi $sp, $sp, 4
+	sw $ra, 0($sp)
+	addi $fp, $sp, 4
+	addi $sp, $sp, 0
+	lw $t0, 4($fp)
+	li $t1, 4
+	li $t2, 1
+	mul $t1, $t1, $t2
+	add $t0, $t0, $t1
+	subi $sp, $sp, 4
+	sw $t0, 0($sp)
+#here 0
+	lw $t0, 8($fp)
+#here 1
+	lw $t1, 0($sp)
+	addi $sp, $sp, 4
+#here 2
+	sw $t0, 0($t1)
+	lw $t0, 4($fp)
+	li $t1, 4
+	li $t2, 2
+	mul $t1, $t1, $t2
+	add $t0, $t0, $t1
+	subi $sp, $sp, 4
+	sw $t0, 0($sp)
+#here 0
+	lw $t0, 12($fp)
+#here 1
+	lw $t1, 0($sp)
+	addi $sp, $sp, 4
+#here 2
+	sw $t0, 0($t1)
+	addi $sp, $fp, -4
+	lw $ra, 0($sp)
+	addi $sp, $sp, 4
+	lw $fp, 0($sp)
+	addi $sp, $sp, 4
+	li $t0, 0
+	jr $ra
+circle_get_x:
+	subi $sp, $sp, 4
+	sw $fp, 0($sp)
+	subi $sp, $sp, 4
+	sw $ra, 0($sp)
+	addi $fp, $sp, 4
+	addi $sp, $sp, 0
+	lw $t0, 4($fp)
+	li $t1, 4
+	li $t2, 1
+	mul $t1, $t1, $t2
+	add $t0, $t0, $t1
+	lw $t0, 0($t0)
+	addi $sp, $fp, -4
+	lw $ra, 0($sp)
+	addi $sp, $sp, 4
+	lw $fp, 0($sp)
+	addi $sp, $sp, 4
+	li $t0, 0
 	jr $ra
 #built-in atoi
 atoi:
@@ -66,6 +204,18 @@ atoi_error:
 atoi_end:
 	jr $ra
 .data
+_3:
+	.word 0
+_1:
+	.word 0
+_0:
+	.word 0
+_2:
+	.word 0
 point_descr:
 	.word 0
 	.word point_constructor
+circle_descr:
+	.word point_descr
+	.word circle_constructor
+	.word circle_get_x

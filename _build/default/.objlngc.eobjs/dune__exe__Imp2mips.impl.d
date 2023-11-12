@@ -1,1 +1,1 @@
-imp2mips.ml: Array Hashtbl Imp List Mips Option Printf String
+imp2mips.ml: Array Hashtbl Imp Linearscan List Mips Nimp Option Printf String

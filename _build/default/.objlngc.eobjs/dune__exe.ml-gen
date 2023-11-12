@@ -6,11 +6,23 @@ module Imp = Dune__exe__Imp
 (** @canonical Dune__exe.Imp2mips *)
 module Imp2mips = Dune__exe__Imp2mips
 
+(** @canonical Dune__exe.Imp2mips_old *)
+module Imp2mips_old = Dune__exe__Imp2mips_old
+
 (** @canonical Dune__exe.Imppp *)
 module Imppp = Dune__exe__Imppp
 
+(** @canonical Dune__exe.Linearscan *)
+module Linearscan = Dune__exe__Linearscan
+
+(** @canonical Dune__exe.Liveness *)
+module Liveness = Dune__exe__Liveness
+
 (** @canonical Dune__exe.Mips *)
 module Mips = Dune__exe__Mips
+
+(** @canonical Dune__exe.Nimp *)
+module Nimp = Dune__exe__Nimp
 
 (** @canonical Dune__exe.Objlng *)
 module Objlng = Dune__exe__Objlng

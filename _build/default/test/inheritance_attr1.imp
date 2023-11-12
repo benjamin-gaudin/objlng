@@ -1,13 +1,39 @@
+var _3;
+var _1;
+var _0;
+var _2;
+var point_descr;
+var circle_descr;
 
 function main() {
   var a1;
+  var b1;
   
-  
+  _0 = 0;
+  _1 = 1;
+  _2 = alloc(16);
+  *_2 = *circle_descr;
+  circle_constructor(_2, _0, _1);
+  b1 = _2;
+  b1;
+  _3 = *(*(*b1 + 8))(b1);
+  putchar(_3);
 }
 
 function point_constructor(_this, x) {
   
   *(_this + (4 * 1)) = x;
+}
+
+function circle_constructor(_this, x, y) {
+  
+  *(_this + (4 * 1)) = x;
+  *(_this + (4 * 2)) = y;
+}
+
+function circle_get_x(_this) {
+  
+  *(_this + (4 * 1));
 }
 
 
