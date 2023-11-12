@@ -62,28 +62,12 @@ let liveness fdef =
         let lv_in = lv_in_instr i lv_mid in
         live.(i.nb) <- lv_in;
         lv_in
-  (*
-    List.fold_right(fun x acc -> let lv_in = lv_in_instr x in acc) l lv_out
-  *)
   in
   let _ = lv_in_list fdef.code VSet.empty in
   live
 
-
-let print_live live =
-  List.iter (fun x ->
-    print_string "[";
-    VSet.iter (fun y ->
-      print_string (y ^ ", ") ;
-    ) x;
-    print_endline "]";
-  ) live
-
-
 let liveness_intervals_from_liveness fdef =
   let live = Array.to_list (liveness fdef) in
-  print_endline "Live :";
-  print_live live;
   let rec find_index f lst =
     match lst with
     | [] -> raise Not_found
@@ -96,15 +80,6 @@ let liveness_intervals_from_liveness fdef =
     with
       | Not_found -> false
   in
-  (*
-  let rec last_index x previous arr =
-    try
-      let n = find_index (is_in x) arr in
-      (last_index x n (slice (n+1) arr))
-    with
-      | Not_found -> previous
-  in
-  *)
   let rec last_index x previous n arr = match arr with
     | [] -> previous
     | h :: t when is_in x h -> last_index x n (n+1) t
@@ -120,23 +95,7 @@ let liveness_intervals_from_liveness fdef =
       | Not_found -> (x, -1, -1)
   in
 
-  print_endline "live before filter :";
-  List.iter (fun (x,l,h) -> print_endline (
-    x ^ " : (" ^ x ^ ", " ^ (string_of_int l) ^ ", " ^ (string_of_int h) ^ ")"))
-    (List.map make_intervalle (fdef.locals));
-
-  (*
-  List.filter (fun (_,l,h) -> l <> -1 && h <> -1 ) (List.map make_intervalle
-    (fdef.locals @ fdef.params))
-  *)
-
-
   List.map make_intervalle (fdef.locals)
-
-
 
   (* for each variable [x], create the smallest interval that contains all
      the numbers of instructions where [x] is live *)
-  (*
-  failwith "not implemented"
-  *)

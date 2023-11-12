@@ -31,12 +31,6 @@ type program = {
     functions: function_def list;
   }
 
-
-let print_alloc alloc trad_v =
-  Hashtbl.iter (fun k v ->
-    print_endline (k ^ " : " ^ (trad_v v));
-  ) alloc
-
 (**
    Numbering and utility functions.
  *)

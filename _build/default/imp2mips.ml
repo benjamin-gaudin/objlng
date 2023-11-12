@@ -13,11 +13,11 @@ exception Error of string
 let tmp_regs = [| t0; t1; t2; t3; t4; t5; t6; t7; t8; t9 |]
 let nb_tmp_regs = Array.length tmp_regs
 
-let var_regs = [| s0; s1; s2; s3; s4; s5; s6; s7 |]
 (*
+let var_regs = [| s0; s1; s2; s3; s4; s5; s6; s7 |]
 let var_regs = [| s0; s1|]
-let var_regs = [| s0 |]
 *)
+let var_regs = [| s0 |]
 let nb_var_regs = Array.length var_regs
 
 let push reg = subi sp sp 4 @@ sw reg 0(sp)
@@ -44,16 +44,6 @@ let allocate_locals fdef =
     | Linearscan.RegN n -> Hashtbl.add alloc var_name (Reg var_regs.(n))
     | Linearscan.Spill n -> Hashtbl.add alloc var_name (Stack (-4 * (n+2)))
   in
-  let print_alloc var_name memory = match memory with
-    | Linearscan.RegN n -> print_endline (var_name ^ " -> Register : " ^ (string_of_int n))
-    | Linearscan.Spill n -> print_endline (var_name ^ " -> Spill : " ^ (string_of_int n))
-  in
-  print_endline "Liste locals :";
-  List.iter print_endline fdef.locals;
-  print_endline "Liste params :";
-  List.iter print_endline fdef.params;
-  print_endline "Raw alloc :";
-  Hashtbl.iter print_alloc raw_alloc;
   Hashtbl.iter fill_alloc raw_alloc;
   (alloc, spill_count, r_max)
 
@@ -74,34 +64,7 @@ let tr_function fdef =
 
   let (alloc, spill_count, r_max) = allocate_locals fdef in
 
-  (*
-  print_endline "alloc local:";
-  List.iter
-    (fun name -> print_endline (name ^ " : " ^ (Hashtbl.find alloc name)))
-    fdef.locals;
-  *)
-
-
   List.iteri (fun k id -> Hashtbl.add alloc id (Stack (4*(k+1)))) fdef.params;
-
-  (*
-  print_string "r_max : ";
-  print_int r_max;
-  print_endline "";
-  *)
-
-  let trad_v v = match v with
-    | Reg n -> n
-    | Stack n -> Printf.sprintf "%d" n
-  in
-
-  Nimp.print_alloc alloc trad_v;
-
-  (*
-  let alloc = Hashtbl.create 16 in
-  List.iteri (fun k id -> Hashtbl.add alloc id (4*(k+1))) fdef.params;
-  List.iteri (fun k id -> Hashtbl.add alloc id (-4*(k+2))) fdef.locals;
-  *)
 
   (* Generate Mips code for an Imp expression. The generated code produces the
      result in register $ti, and do not alter registers $tj with j < i. *)

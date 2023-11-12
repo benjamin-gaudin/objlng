@@ -1,1 +1,1 @@
-nimp.ml: Hashtbl Imp List
+nimp.ml: Imp List

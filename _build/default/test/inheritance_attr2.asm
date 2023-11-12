@@ -17,12 +17,6 @@ main:
 	addi $sp, $sp, -16
 	subi $sp, $sp, 4
 	sw $s0, 0($sp)
-	subi $sp, $sp, 4
-	sw $s1, 0($sp)
-	subi $sp, $sp, 4
-	sw $s2, 0($sp)
-	subi $sp, $sp, 4
-	sw $s3, 0($sp)
 	li $t0, 1
 	la $t1, _0
 	sw $t0, 0($t1)
@@ -114,7 +108,7 @@ main:
 	addi $sp, $sp, 12
 	la $t0, _5
 	lw $t0, 0($t0)
-	move $s1, $t0
+	sw $t0, -12($fp)
 	move $t0, $s0
 	li $t0, 48
 	la $t1, _6
@@ -142,7 +136,7 @@ main:
 	sw $t0, 0($t1)
 	la $t0, _7
 	lw $t0, 0($t0)
-	move $s2, $t0
+	sw $t0, -16($fp)
 	li $t0, 5
 	la $t1, _8
 	sw $t0, 0($t1)
@@ -181,15 +175,15 @@ main:
 	addi $sp, $sp, 8
 	la $t0, _9
 	lw $t0, 0($t0)
-	move $s3, $t0
-	move $t0, $s1
+	sw $t0, -20($fp)
+	lw $t0, -12($fp)
 #Start tr_params DCall
-	move $t0, $s1
+	lw $t0, -12($fp)
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
 #Start save DCall
 #End save DCall
-	move $t0, $s1
+	lw $t0, -12($fp)
 	lw $t0, 0($t0)
 	li $t1, 4
 	add $t0, $t0, $t1
@@ -228,14 +222,14 @@ main:
 	move $a0, $t0
 	li $v0, 11
 	syscall
-	move $t0, $s3
+	lw $t0, -20($fp)
 #Start tr_params DCall
-	move $t0, $s3
+	lw $t0, -20($fp)
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
 #Start save DCall
 #End save DCall
-	move $t0, $s3
+	lw $t0, -20($fp)
 	lw $t0, 0($t0)
 	li $t1, 4
 	add $t0, $t0, $t1
@@ -251,17 +245,11 @@ main:
 	move $a0, $t0
 	li $v0, 11
 	syscall
-	move $t0, $s2
-	move $t0, $s2
+	lw $t0, -16($fp)
+	lw $t0, -16($fp)
 	move $a0, $t0
 	li $v0, 11
 	syscall
-	lw $s3, 0($sp)
-	addi $sp, $sp, 4
-	lw $s2, 0($sp)
-	addi $sp, $sp, 4
-	lw $s1, 0($sp)
-	addi $sp, $sp, 4
 	lw $s0, 0($sp)
 	addi $sp, $sp, 4
 	addi $sp, $fp, -4

@@ -6,9 +6,6 @@ module Imp = Dune__exe__Imp
 (** @canonical Dune__exe.Imp2mips *)
 module Imp2mips = Dune__exe__Imp2mips
 
-(** @canonical Dune__exe.Imp2mips_old *)
-module Imp2mips_old = Dune__exe__Imp2mips_old
-
 (** @canonical Dune__exe.Imppp *)
 module Imppp = Dune__exe__Imppp
 

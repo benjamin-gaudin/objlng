@@ -43,9 +43,6 @@ let lscan_alloc nb_regs fdef =
       | RegN n -> free := n :: !free;
       | _ -> () ;
       Hashtbl.remove alloc x;
-      (*
-      List.filter (fun (x2,_,_) -> x2 <> x) l
-      *)
     in
 
     let is_continued a interval = match interval with
@@ -57,34 +54,13 @@ let lscan_alloc nb_regs fdef =
   in
   (* for each interval i, in sorted order *)
   let list_is_empty l = List.compare_length_with l 0 = 0 in
-(*
-  List.iter (fun i ->
-    let xi, li, hi = i in
-    print_string ("xi :"^ xi ^ " li :");
-    print_int li;
-    print_string " hi :";
-    print_int hi;
-    print_endline "";
-*)
-
-
 
   List.iter (fun i ->
       let xi, li, hi = i in
       active := expire li !active;
       if not (list_is_empty !free) then (
         let new_reg = List.hd !free in
-        (*
-        print_endline "avant";
-        List.iter print_int !free;
-        print_endline "";
-        *)
         free := List.tl !free;
-        (*
-        print_endline "apres";
-        List.iter print_int !free;
-        print_endline "";
-        *)
         r_max := max (!r_max) (nb_regs - (List.length !free) -1);
         active := insert_active i !active;
         Hashtbl.replace alloc xi (RegN new_reg);
