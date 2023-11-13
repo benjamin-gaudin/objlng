@@ -4,6 +4,7 @@ var _11;
 var _3;
 var _4;
 var _1;
+var _13;
 var _0;
 var _9;
 var _10;
@@ -49,8 +50,11 @@ function main() {
   _11 = *(*(*p + 4))(p);
   putchar(_11);
   carre;
-  _12 = *(*(*carre + 4))(carre);
+  _12 = *(*(*carre + 16))(carre);
   putchar(_12);
+  carre;
+  _13 = *(*(*carre + 20))(carre);
+  putchar(_13);
   c;
   putchar(c);
 }
@@ -85,6 +89,17 @@ function point_sum(_this, x) {
 function carre_constructor(_this, x) {
   
   *(*(**_this + 12))(_this, x, x);
+  *(_this + (4 * 1)) = x;
+}
+
+function carre_get_z(_this) {
+  
+  return((*(_this + (4 * 1)) + 98));
+}
+
+function carre_get_z_super(_this) {
+  
+  return(*(*(**_this + 4))(_this));
 }
 
 

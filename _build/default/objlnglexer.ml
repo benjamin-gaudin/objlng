@@ -4,6 +4,8 @@
   open Lexing
   open Objlngparser
 
+  exception Error of string
+
     let keyword_or_ident =
     let h = Hashtbl.create 17 in
     List.iter (fun (s, k) -> Hashtbl.add h s k)
@@ -32,7 +34,7 @@
       with Not_found -> IDENT(s)
 
 
-# 36 "objlnglexer.ml"
+# 38 "objlnglexer.ml"
 let __ocaml_lex_tables = {
   Lexing.lex_base =
    "\000\000\235\255\236\255\237\255\238\255\239\255\240\255\241\255\
@@ -154,119 +156,119 @@ let rec token lexbuf =
 and __ocaml_lex_token_rec lexbuf __ocaml_lex_state =
   match Lexing.engine __ocaml_lex_tables __ocaml_lex_state lexbuf with
       | 0 ->
-# 42 "objlnglexer.mll"
+# 44 "objlnglexer.mll"
       ( new_line lexbuf; token lexbuf )
-# 160 "objlnglexer.ml"
+# 162 "objlnglexer.ml"
 
   | 1 ->
-# 44 "objlnglexer.mll"
+# 46 "objlnglexer.mll"
       ( token lexbuf )
-# 165 "objlnglexer.ml"
+# 167 "objlnglexer.ml"
 
   | 2 ->
-# 46 "objlnglexer.mll"
+# 48 "objlnglexer.mll"
       ( new_line lexbuf; token lexbuf )
-# 170 "objlnglexer.ml"
+# 172 "objlnglexer.ml"
 
   | 3 ->
-# 48 "objlnglexer.mll"
+# 50 "objlnglexer.mll"
       ( comment lexbuf; token lexbuf )
-# 175 "objlnglexer.ml"
+# 177 "objlnglexer.ml"
 
   | 4 ->
 let
-# 49 "objlnglexer.mll"
+# 51 "objlnglexer.mll"
               n
-# 181 "objlnglexer.ml"
+# 183 "objlnglexer.ml"
 = Lexing.sub_lexeme lexbuf lexbuf.Lexing.lex_start_pos lexbuf.Lexing.lex_curr_pos in
-# 50 "objlnglexer.mll"
+# 52 "objlnglexer.mll"
       ( CST(int_of_string n) )
-# 185 "objlnglexer.ml"
+# 187 "objlnglexer.ml"
 
   | 5 ->
 let
-# 51 "objlnglexer.mll"
+# 53 "objlnglexer.mll"
              id
-# 191 "objlnglexer.ml"
+# 193 "objlnglexer.ml"
 = Lexing.sub_lexeme lexbuf lexbuf.Lexing.lex_start_pos lexbuf.Lexing.lex_curr_pos in
-# 52 "objlnglexer.mll"
+# 54 "objlnglexer.mll"
       ( keyword_or_ident id )
-# 195 "objlnglexer.ml"
+# 197 "objlnglexer.ml"
 
   | 6 ->
-# 54 "objlnglexer.mll"
+# 56 "objlnglexer.mll"
       ( SEMI )
-# 200 "objlnglexer.ml"
+# 202 "objlnglexer.ml"
 
   | 7 ->
-# 56 "objlnglexer.mll"
+# 58 "objlnglexer.mll"
       ( SET )
-# 205 "objlnglexer.ml"
+# 207 "objlnglexer.ml"
 
   | 8 ->
-# 58 "objlnglexer.mll"
+# 60 "objlnglexer.mll"
       ( PLUS )
-# 210 "objlnglexer.ml"
+# 212 "objlnglexer.ml"
 
   | 9 ->
-# 60 "objlnglexer.mll"
+# 62 "objlnglexer.mll"
       ( STAR )
-# 215 "objlnglexer.ml"
+# 217 "objlnglexer.ml"
 
   | 10 ->
-# 62 "objlnglexer.mll"
+# 64 "objlnglexer.mll"
       ( LT )
-# 220 "objlnglexer.ml"
+# 222 "objlnglexer.ml"
 
   | 11 ->
-# 64 "objlnglexer.mll"
+# 66 "objlnglexer.mll"
       ( LPAR )
-# 225 "objlnglexer.ml"
+# 227 "objlnglexer.ml"
 
   | 12 ->
-# 66 "objlnglexer.mll"
+# 68 "objlnglexer.mll"
       ( RPAR )
-# 230 "objlnglexer.ml"
+# 232 "objlnglexer.ml"
 
   | 13 ->
-# 68 "objlnglexer.mll"
+# 70 "objlnglexer.mll"
       ( BEGIN )
-# 235 "objlnglexer.ml"
+# 237 "objlnglexer.ml"
 
   | 14 ->
-# 70 "objlnglexer.mll"
+# 72 "objlnglexer.mll"
       ( END )
-# 240 "objlnglexer.ml"
+# 242 "objlnglexer.ml"
 
   | 15 ->
-# 72 "objlnglexer.mll"
+# 74 "objlnglexer.mll"
       ( LBRACKET )
-# 245 "objlnglexer.ml"
+# 247 "objlnglexer.ml"
 
   | 16 ->
-# 74 "objlnglexer.mll"
+# 76 "objlnglexer.mll"
       ( RBRACKET )
-# 250 "objlnglexer.ml"
+# 252 "objlnglexer.ml"
 
   | 17 ->
-# 76 "objlnglexer.mll"
+# 78 "objlnglexer.mll"
       ( DOT )
-# 255 "objlnglexer.ml"
+# 257 "objlnglexer.ml"
 
   | 18 ->
-# 78 "objlnglexer.mll"
+# 80 "objlnglexer.mll"
       ( COMMA )
-# 260 "objlnglexer.ml"
+# 262 "objlnglexer.ml"
 
   | 19 ->
-# 80 "objlnglexer.mll"
-      ( failwith ("Unknown character : " ^ (lexeme lexbuf)) )
-# 265 "objlnglexer.ml"
+# 82 "objlnglexer.mll"
+      ( raise (Error ("Unknown character : " ^ lexeme lexbuf)) )
+# 267 "objlnglexer.ml"
 
   | 20 ->
-# 82 "objlnglexer.mll"
+# 84 "objlnglexer.mll"
       ( EOF )
-# 270 "objlnglexer.ml"
+# 272 "objlnglexer.ml"
 
   | __ocaml_lex_state -> lexbuf.Lexing.refill_buff lexbuf;
       __ocaml_lex_token_rec lexbuf __ocaml_lex_state
@@ -276,19 +278,19 @@ and comment lexbuf =
 and __ocaml_lex_comment_rec lexbuf __ocaml_lex_state =
   match Lexing.engine __ocaml_lex_tables __ocaml_lex_state lexbuf with
       | 0 ->
-# 86 "objlnglexer.mll"
+# 88 "objlnglexer.mll"
       ( () )
-# 282 "objlnglexer.ml"
+# 284 "objlnglexer.ml"
 
   | 1 ->
-# 88 "objlnglexer.mll"
+# 90 "objlnglexer.mll"
       ( comment lexbuf )
-# 287 "objlnglexer.ml"
+# 289 "objlnglexer.ml"
 
   | 2 ->
-# 90 "objlnglexer.mll"
-      ( failwith "unfinished comment" )
-# 292 "objlnglexer.ml"
+# 92 "objlnglexer.mll"
+      ( raise (Error "unfinished comment") )
+# 294 "objlnglexer.ml"
 
   | __ocaml_lex_state -> lexbuf.Lexing.refill_buff lexbuf;
       __ocaml_lex_comment_rec lexbuf __ocaml_lex_state

@@ -231,7 +231,7 @@ main:
 #End save DCall
 	lw $t0, -20($fp)
 	lw $t0, 0($t0)
-	li $t1, 4
+	li $t1, 16
 	add $t0, $t0, $t1
 	lw $t0, 0($t0)
 	jalr $t0
@@ -241,6 +241,29 @@ main:
 	la $t1, _12
 	sw $t0, 0($t1)
 	la $t0, _12
+	lw $t0, 0($t0)
+	move $a0, $t0
+	li $v0, 11
+	syscall
+	lw $t0, -20($fp)
+#Start tr_params DCall
+	lw $t0, -20($fp)
+	subi $sp, $sp, 4
+	sw $t0, 0($sp)
+#Start save DCall
+#End save DCall
+	lw $t0, -20($fp)
+	lw $t0, 0($t0)
+	li $t1, 20
+	add $t0, $t0, $t1
+	lw $t0, 0($t0)
+	jalr $t0
+#Start restore DCall
+#End restore DCall
+	addi $sp, $sp, 4
+	la $t1, _13
+	sw $t0, 0($t1)
+	la $t0, _13
 	lw $t0, 0($t0)
 	move $a0, $t0
 	li $v0, 11
@@ -463,6 +486,84 @@ carre_constructor:
 #Start restore DCall
 #End restore DCall
 	addi $sp, $sp, 12
+	lw $t0, 4($fp)
+	li $t1, 4
+	li $t2, 1
+	mul $t1, $t1, $t2
+	add $t0, $t0, $t1
+	subi $sp, $sp, 4
+	sw $t0, 0($sp)
+#here 0
+	lw $t0, 8($fp)
+#here 1
+	lw $t1, 0($sp)
+	addi $sp, $sp, 4
+#here 2
+	sw $t0, 0($t1)
+	addi $sp, $fp, -4
+	lw $ra, 0($sp)
+	addi $sp, $sp, 4
+	lw $fp, 0($sp)
+	addi $sp, $sp, 4
+	li $t0, 0
+	jr $ra
+carre_get_z:
+	subi $sp, $sp, 4
+	sw $fp, 0($sp)
+	subi $sp, $sp, 4
+	sw $ra, 0($sp)
+	addi $fp, $sp, 4
+	addi $sp, $sp, 0
+	lw $t0, 4($fp)
+	li $t1, 4
+	li $t2, 1
+	mul $t1, $t1, $t2
+	add $t0, $t0, $t1
+	lw $t0, 0($t0)
+	li $t1, 98
+	add $t0, $t0, $t1
+	addi $sp, $fp, -4
+	lw $ra, 0($sp)
+	addi $sp, $sp, 4
+	lw $fp, 0($sp)
+	addi $sp, $sp, 4
+	jr $ra
+	addi $sp, $fp, -4
+	lw $ra, 0($sp)
+	addi $sp, $sp, 4
+	lw $fp, 0($sp)
+	addi $sp, $sp, 4
+	li $t0, 0
+	jr $ra
+carre_get_z_super:
+	subi $sp, $sp, 4
+	sw $fp, 0($sp)
+	subi $sp, $sp, 4
+	sw $ra, 0($sp)
+	addi $fp, $sp, 4
+	addi $sp, $sp, 0
+#Start tr_params DCall
+	lw $t0, 4($fp)
+	subi $sp, $sp, 4
+	sw $t0, 0($sp)
+#Start save DCall
+#End save DCall
+	lw $t0, 4($fp)
+	lw $t0, 0($t0)
+	lw $t0, 0($t0)
+	li $t1, 4
+	add $t0, $t0, $t1
+	lw $t0, 0($t0)
+	jalr $t0
+#Start restore DCall
+#End restore DCall
+	addi $sp, $sp, 4
+	addi $sp, $fp, -4
+	lw $ra, 0($sp)
+	addi $sp, $sp, 4
+	lw $fp, 0($sp)
+	addi $sp, $sp, 4
+	jr $ra
 	addi $sp, $fp, -4
 	lw $ra, 0($sp)
 	addi $sp, $sp, 4
@@ -501,6 +602,8 @@ _4:
 	.word 0
 _1:
 	.word 0
+_13:
+	.word 0
 _0:
 	.word 0
 _9:
@@ -528,7 +631,8 @@ point_descr:
 	.word point_sum
 carre_descr:
 	.word point_descr
-	.word circle_get_z
 	.word circle_test
 	.word point_sum
 	.word carre_constructor
+	.word carre_get_z
+	.word carre_get_z_super

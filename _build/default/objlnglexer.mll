@@ -3,6 +3,8 @@
   open Lexing
   open Objlngparser
 
+  exception Error of string
+
     let keyword_or_ident =
     let h = Hashtbl.create 17 in
     List.iter (fun (s, k) -> Hashtbl.add h s k)
@@ -77,7 +79,7 @@ rule token = parse
   | ","
       { COMMA }
   | _
-      { failwith ("Unknown character : " ^ (lexeme lexbuf)) }
+      { raise (Error ("Unknown character : " ^ lexeme lexbuf)) }
   | eof
       { EOF }
 
@@ -87,4 +89,4 @@ and comment = parse
   | _
       { comment lexbuf }
   | eof
-      { failwith "unfinished comment" }
+      { raise (Error "unfinished comment") }
