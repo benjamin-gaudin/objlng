@@ -13,6 +13,15 @@ type typ =
 
 type binop = Add | Mul | Lt
 
+let type_op op = match op with
+  | Add | Mul -> TInt
+  | Lt -> TBool
+
+let type_op_args op = match op with
+  | Add | Mul | Lt -> (TInt, TInt)
+
+exception TypeError
+
 type 'a expression = {
   annot: 'a;
   expr: 'a expr;
@@ -65,7 +74,7 @@ type 'a class_def = {
 
 let get_name e = match e.annot with
             | TClass name -> name
-            | _ -> failwith "Not a class type"
+            | _ -> raise TypeError
 
 (* Program as in IMP + types + user-defined  *)
 type 'a program = {
