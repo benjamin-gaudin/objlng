@@ -1,0 +1,12 @@
+class child extends parent {
+
+}
+
+class parent {
+
+}
+
+
+function void main(){
+
+}

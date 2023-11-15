@@ -1,0 +1,9 @@
+function int my_function(int x){
+  return x;
+}
+
+function void main() {
+  var bool b;
+  b = true;
+  my_function(b);
+}

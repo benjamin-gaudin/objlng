@@ -1,0 +1,7 @@
+function void main() {
+  if (1) {
+    putchar(97);
+  } else {
+    putchar(98);
+  }
+}

@@ -1,7 +1,0 @@
-
-function void main() {
-  var int a;
-
-  a = 5617;
-  a;
-}

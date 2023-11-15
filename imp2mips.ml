@@ -97,15 +97,10 @@ let tr_function fdef =
        Jump to the function.
        Finallly restore saved tempary registers and clean the stack. *)
     | Call(f, params) ->
-       comment "Start tr_params Call"
-       @@ tr_params i params
-       @@ comment "Start save Call"
+        tr_params i params
        @@ save_tmp (i-1)
-       @@ comment "End save Call"
        @@ jal f
-       @@ comment "Start restore Call"
        @@ restore_tmp (i-1)
-       @@ comment "End restore Call"
        @@ addi sp sp (4 * List.length params)
 
     | Deref e ->
@@ -120,16 +115,11 @@ let tr_function fdef =
     | Addr s ->
        la ti s
     | DCall (e1, params) ->
-        comment "Start tr_params DCall"
-       @@ tr_params i params
-       @@ comment "Start save DCall"
+       tr_params i params
        @@ save_tmp (i-1)
-       @@ comment "End save DCall"
        @@ tr_expr i e1
        @@ jalr ti
-       @@ comment "Start restore DCall"
        @@ restore_tmp (i-1)
-       @@ comment "End restore DCall"
        @@ addi sp sp (4 * List.length params)
        (* @@ addi sp sp (4 * List.length params) *)
 
@@ -186,11 +176,8 @@ let tr_function fdef =
     | Write(e1, e2) -> (* TODO use registers not push pop ? *)
        tr_expr 0 e1  (* t0: pointer *)
        @@ push t0
-       @@ comment "here 0"
        @@ tr_expr 0 e2  (* t0: value to be written *)
-       @@ comment "here 1"
        @@ pop t1
-       @@ comment "here 2"
        @@ sw t0 0(t1)
     | Seq s -> tr_seq s
   in

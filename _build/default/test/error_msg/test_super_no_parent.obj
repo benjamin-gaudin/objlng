@@ -1,0 +1,13 @@
+class my_class {
+  attribute int x;
+
+  method void constructor(){
+    this.x = super.get_x();
+  }
+}
+
+function void main() {
+  var my_class c;
+
+  c = new my_class();
+}

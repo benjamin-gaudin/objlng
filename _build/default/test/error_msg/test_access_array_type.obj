@@ -1,0 +1,7 @@
+function void main() {
+  var [int] arr;
+  var int y;
+
+  arr = new[int, 5];
+  y = arr[true];
+}

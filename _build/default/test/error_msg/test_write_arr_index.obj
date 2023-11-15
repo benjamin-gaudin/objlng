@@ -1,0 +1,6 @@
+function void main() {
+  var [int] arr;
+
+  arr = new[int, 5];
+  arr[true] = 0;
+}

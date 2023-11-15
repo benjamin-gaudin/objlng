@@ -1,0 +1,6 @@
+function void main() {
+  while (1) {
+    putchar(97);
+  }
+}
+

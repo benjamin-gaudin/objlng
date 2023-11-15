@@ -1,0 +1,13 @@
+class my_class {
+  method void constructor(){
+
+  }
+}
+
+function void main() {
+  var my_class c;
+
+  c = new my_class();
+  c.x = 0;
+}
+

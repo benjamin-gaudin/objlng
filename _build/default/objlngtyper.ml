@@ -8,7 +8,6 @@ type cenv = unit class_def Env.t
 
 (* utility function *)
 let check te t =
-  (* if te.annot <> t then failwith "type error (check fuction)"; *)
   if te.annot <> t then raise TypeError;
   te
 
@@ -28,6 +27,11 @@ let rec string_of_typ typ = match typ with
   | TClass s -> "class of " ^ s
   | TArray t -> "array of " ^ (string_of_typ t)
   | TVoid -> "void"
+
+let string_of_op op = match op with
+  | Add -> "addition"
+  | Mul -> "multiplication"
+  | Lt -> "less than"
 
 let check_args f_name f_param e =
   ignore(
@@ -69,7 +73,7 @@ let type_program (p: unit program): typ program =
         with
         | Not_found -> failwith
           ("class " ^ cla.name ^ " defined before it's parent class : " ^
-           parent_cla ^ "or this parent class is not defined" )
+           parent_cla ^ " or this parent class is not defined" )
     in
     match classes with
     | [] -> classes_previous
@@ -120,17 +124,18 @@ let type_program (p: unit program): typ program =
           let exp_t_e1, exp_t_e2 = type_op_args op in
           let s_exp_t_e1 = string_of_typ exp_t_e1 in
           let s_exp_t_e2 = string_of_typ exp_t_e2 in
+          let s_op = string_of_op op in
           let t_e1 = type_expr e1 in
           let t_e2 = type_expr e2 in
           let _ = try check (t_e1) TInt with
-              | TypeError -> failwith ("left part of " ^ s_exp_t_e1 ^
-                " incompatible with type " ^ (string_of_typ t_e1.annot ) ^ "
-                need type " ^ s_exp_t_e1)
+              | TypeError -> failwith ("left part of " ^ s_op ^
+                " incompatible with type " ^ (string_of_typ t_e1.annot ) ^
+                " need type " ^ s_exp_t_e1)
           in
           let _ = try check (t_e2) TInt with
-              | TypeError -> failwith ("right part of " ^ s_exp_t_e2 ^
-                " incompatible with type " ^ (string_of_typ t_e2.annot ) ^ "
-                need type " ^ s_exp_t_e2)
+              | TypeError -> failwith ("right part of " ^ s_op ^
+                " incompatible with type " ^ (string_of_typ t_e2.annot ) ^
+                " need type " ^ s_exp_t_e2)
           in
           mk_expr (type_op op) (Binop(op, t_e1, t_e2))
       | Call (f, e) ->
@@ -146,8 +151,7 @@ let type_program (p: unit program): typ program =
                | Not_found ->
                    let name_parent =
                      try Option.get cla_def.parent with
-                     | Invalid_argument _ -> failwith
-                       (method_name ^ "Not found in inheritance")
+                     | Invalid_argument _ -> raise TypeError
                      in
                      let parent_def = Env.find name_parent cenv in
                      aux parent_def
@@ -156,14 +160,14 @@ let type_program (p: unit program): typ program =
           let cla_name = try get_name (type_expr e) with
                          | TypeError ->
                              let s_t_e = string_of_typ (type_expr e).annot in
-                             failwith ("Call a method but not on a class," ^
+                             failwith ("Call a method but not on a class, " ^
                                s_t_e ^ " found")
           in
           let cla_def = Env.find cla_name cenv in
           let method_def =
             try aux cla_def with
-            | TypeError -> failwith ("Method " ^ method_name ^ "not found in " ^
-              cla_name ^ "or in its parents")
+            | TypeError -> failwith ("Method " ^ method_name ^ " not found in " ^
+              cla_name ^ " or in its parents")
           in
           let t_args = List.map type_expr args in
           List.iter2 (check_args method_def.name) method_def.params t_args;
@@ -181,35 +185,38 @@ let type_program (p: unit program): typ program =
           let t_e1 = try get_array_type(type_expr e1) with
                        | TypeError ->
                          let s_t_e1 = string_of_typ (type_expr e1).annot in
-                           failwith ("Need array type but " ^ s_t_e1 ^ "found")
+                           failwith ("Need array type but " ^ s_t_e1 ^ " found")
           in
           let _ = try check (type_expr e2) TInt with
                   | TypeError ->
                       let s_t_e2 = string_of_typ (type_expr e2).annot in
-                      failwith ("Array index need to be integer, " ^ s_t_e2 ^ "
-                      found")
+                      failwith ("Array index need to be integer, " ^ s_t_e2 ^
+                      " found")
           in
           mk_expr (t_e1) (Read(Arr(type_expr e1, type_expr e2)))
       | Read(Atr (e1, field)) ->
           let cla_name = try get_name (type_expr e1) with
                          | TypeError ->
                              let s_t_e1 = string_of_typ (type_expr e1).annot in
-                             failwith ("Access a field but not on a class," ^
+                             failwith ("Access a field but not on a class, " ^
                                s_t_e1 ^ " found")
           in
           (try
           mk_expr (snd (List.find (fun x -> fst x = field) (Env.find cla_name cenv).fields))
                   (Read(Atr(type_expr e1, field)))
           with
-          | Not_found -> failwith ("Fields " ^ field ^ " not found in class" ^
+          | Not_found -> failwith ("Fields " ^ field ^ " not found in class " ^
                          cla_name ^ " or in parents")
           )
       | This -> (try mk_expr (Env.find "_this" tenv) This with
                   | Not_found -> failwith "this not in class"
                 )
-      | Super -> let cla_this = match Env.find "_this" tenv with
-                                | TClass s -> s
-                                | _ -> failwith "super not in class"
+      | Super -> let cla_this = try (
+                    match Env.find "_this" tenv with
+                      | TClass s -> s
+                      | _ -> assert false
+                    ) with
+                    | Not_found -> failwith "super not in class"
                  in
                  let cla_def_this =
                    List.find (fun x -> x.name = cla_this) p.classes
@@ -243,7 +250,7 @@ let type_program (p: unit program): typ program =
                   | TypeError ->
                       let s_t_e = string_of_typ (type_expr e).annot in
                         failwith ("if condition need a boolean, " ^ s_t_e ^
-                        "found")
+                        " found")
           in
           If (type_expr e, type_seq seq1, type_seq seq2)
       | While   (e, seq) ->
@@ -251,7 +258,7 @@ let type_program (p: unit program): typ program =
                   | TypeError ->
                       let s_t_e = string_of_typ (type_expr e).annot in
                         failwith ("While condition need a boolean, " ^ s_t_e ^
-                        "found")
+                        " found")
           in
           While (check (type_expr e) TBool, type_seq seq)
       | Return  e -> Return (type_expr e) (* TODO check return value, possible ? *)
@@ -280,14 +287,14 @@ let type_program (p: unit program): typ program =
                          | TypeError ->
                             let s_t_e1 = string_of_typ (type_expr e1).annot in
                             failwith ("Write class field but not on a class, " ^
-                            s_t_e1 ^ "found")
+                            s_t_e1 ^ " found")
           in
           let exp_t = try (snd
             (List.find
               (fun x -> fst x = field)
               (Env.find cla_name cenv).fields))
             with
-            | Not_found -> failwith ("Fields " ^ field ^ " not found in class" ^
+            | Not_found -> failwith ("Fields " ^ field ^ " not found in class " ^
                            cla_name ^ " or in parents")
           in
           if exp_t <> (type_expr e).annot
@@ -295,7 +302,7 @@ let type_program (p: unit program): typ program =
             let s_t_e = string_of_typ (type_expr e).annot in
             let s_exp_t = string_of_typ exp_t in
             failwith ("assigment of type " ^ s_t_e ^ " but expected " ^ s_exp_t
-            ^ "for the field " ^ field ^ " in " ^ cla_name)
+            ^ " for the field " ^ field ^ " in " ^ cla_name)
           else Write (Atr (type_expr e1, field), type_expr e)
       | Seq seq -> Seq (type_seq seq)
     in

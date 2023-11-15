@@ -34,14 +34,10 @@ main:
 	lw $t0, 0($t0)
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
-#here 0
 	la $t0, point_descr
-#here 1
 	lw $t1, 0($sp)
 	addi $sp, $sp, 4
-#here 2
 	sw $t0, 0($t1)
-#Start tr_params Call
 	la $t0, _1
 	lw $t0, 0($t0)
 	subi $sp, $sp, 4
@@ -54,11 +50,7 @@ main:
 	lw $t0, 0($t0)
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
-#Start save Call
-#End save Call
 	jal point_constructor
-#Start restore Call
-#End restore Call
 	addi $sp, $sp, 12
 	la $t0, _2
 	lw $t0, 0($t0)
@@ -80,14 +72,10 @@ main:
 	lw $t0, 0($t0)
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
-#here 0
 	la $t0, point_descr
-#here 1
 	lw $t1, 0($sp)
 	addi $sp, $sp, 4
-#here 2
 	sw $t0, 0($t1)
-#Start tr_params Call
 	la $t0, _4
 	lw $t0, 0($t0)
 	subi $sp, $sp, 4
@@ -100,11 +88,7 @@ main:
 	lw $t0, 0($t0)
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
-#Start save Call
-#End save Call
 	jal point_constructor
-#Start restore Call
-#End restore Call
 	addi $sp, $sp, 12
 	la $t0, _5
 	lw $t0, 0($t0)
@@ -113,7 +97,6 @@ main:
 	li $t0, 48
 	la $t1, _6
 	sw $t0, 0($t1)
-#Start tr_params DCall
 	la $t0, _6
 	lw $t0, 0($t0)
 	subi $sp, $sp, 4
@@ -121,16 +104,12 @@ main:
 	move $t0, $s0
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
-#Start save DCall
-#End save DCall
 	move $t0, $s0
 	lw $t0, 0($t0)
 	li $t1, 16
 	add $t0, $t0, $t1
 	lw $t0, 0($t0)
 	jalr $t0
-#Start restore DCall
-#End restore DCall
 	addi $sp, $sp, 8
 	la $t1, _7
 	sw $t0, 0($t1)
@@ -151,14 +130,10 @@ main:
 	lw $t0, 0($t0)
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
-#here 0
 	la $t0, carre_descr
-#here 1
 	lw $t1, 0($sp)
 	addi $sp, $sp, 4
-#here 2
 	sw $t0, 0($t1)
-#Start tr_params Call
 	la $t0, _8
 	lw $t0, 0($t0)
 	subi $sp, $sp, 4
@@ -167,30 +142,21 @@ main:
 	lw $t0, 0($t0)
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
-#Start save Call
-#End save Call
 	jal carre_constructor
-#Start restore Call
-#End restore Call
 	addi $sp, $sp, 8
 	la $t0, _9
 	lw $t0, 0($t0)
 	sw $t0, -20($fp)
 	lw $t0, -12($fp)
-#Start tr_params DCall
 	lw $t0, -12($fp)
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
-#Start save DCall
-#End save DCall
 	lw $t0, -12($fp)
 	lw $t0, 0($t0)
 	li $t1, 4
 	add $t0, $t0, $t1
 	lw $t0, 0($t0)
 	jalr $t0
-#Start restore DCall
-#End restore DCall
 	addi $sp, $sp, 4
 	la $t1, _10
 	sw $t0, 0($t1)
@@ -200,20 +166,15 @@ main:
 	li $v0, 11
 	syscall
 	move $t0, $s0
-#Start tr_params DCall
 	move $t0, $s0
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
-#Start save DCall
-#End save DCall
 	move $t0, $s0
 	lw $t0, 0($t0)
 	li $t1, 4
 	add $t0, $t0, $t1
 	lw $t0, 0($t0)
 	jalr $t0
-#Start restore DCall
-#End restore DCall
 	addi $sp, $sp, 4
 	la $t1, _11
 	sw $t0, 0($t1)
@@ -223,20 +184,15 @@ main:
 	li $v0, 11
 	syscall
 	lw $t0, -20($fp)
-#Start tr_params DCall
 	lw $t0, -20($fp)
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
-#Start save DCall
-#End save DCall
 	lw $t0, -20($fp)
 	lw $t0, 0($t0)
 	li $t1, 16
 	add $t0, $t0, $t1
 	lw $t0, 0($t0)
 	jalr $t0
-#Start restore DCall
-#End restore DCall
 	addi $sp, $sp, 4
 	la $t1, _12
 	sw $t0, 0($t1)
@@ -246,20 +202,15 @@ main:
 	li $v0, 11
 	syscall
 	lw $t0, -20($fp)
-#Start tr_params DCall
 	lw $t0, -20($fp)
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
-#Start save DCall
-#End save DCall
 	lw $t0, -20($fp)
 	lw $t0, 0($t0)
 	li $t1, 20
 	add $t0, $t0, $t1
 	lw $t0, 0($t0)
 	jalr $t0
-#Start restore DCall
-#End restore DCall
 	addi $sp, $sp, 4
 	la $t1, _13
 	sw $t0, 0($t1)
@@ -296,12 +247,9 @@ circle_constructor:
 	add $t0, $t0, $t1
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
-#here 0
 	lw $t0, 8($fp)
-#here 1
 	lw $t1, 0($sp)
 	addi $sp, $sp, 4
-#here 2
 	sw $t0, 0($t1)
 	addi $sp, $fp, -4
 	lw $ra, 0($sp)
@@ -373,12 +321,9 @@ point_constructor:
 	add $t0, $t0, $t1
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
-#here 0
 	lw $t0, 8($fp)
-#here 1
 	lw $t1, 0($sp)
 	addi $sp, $sp, 4
-#here 2
 	sw $t0, 0($t1)
 	lw $t0, 4($fp)
 	li $t1, 4
@@ -387,14 +332,10 @@ point_constructor:
 	add $t0, $t0, $t1
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
-#here 0
 	lw $t0, 12($fp)
-#here 1
 	lw $t1, 0($sp)
 	addi $sp, $sp, 4
-#here 2
 	sw $t0, 0($t1)
-#Start tr_params DCall
 	lw $t0, 8($fp)
 	lw $t1, 12($fp)
 	add $t0, $t0, $t1
@@ -403,8 +344,6 @@ point_constructor:
 	lw $t0, 4($fp)
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
-#Start save DCall
-#End save DCall
 	lw $t0, 4($fp)
 	lw $t0, 0($t0)
 	lw $t0, 0($t0)
@@ -412,8 +351,6 @@ point_constructor:
 	add $t0, $t0, $t1
 	lw $t0, 0($t0)
 	jalr $t0
-#Start restore DCall
-#End restore DCall
 	addi $sp, $sp, 8
 	addi $sp, $fp, -4
 	lw $ra, 0($sp)
@@ -464,7 +401,6 @@ carre_constructor:
 	sw $ra, 0($sp)
 	addi $fp, $sp, 4
 	addi $sp, $sp, 0
-#Start tr_params DCall
 	lw $t0, 8($fp)
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
@@ -474,8 +410,6 @@ carre_constructor:
 	lw $t0, 4($fp)
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
-#Start save DCall
-#End save DCall
 	lw $t0, 4($fp)
 	lw $t0, 0($t0)
 	lw $t0, 0($t0)
@@ -483,8 +417,6 @@ carre_constructor:
 	add $t0, $t0, $t1
 	lw $t0, 0($t0)
 	jalr $t0
-#Start restore DCall
-#End restore DCall
 	addi $sp, $sp, 12
 	lw $t0, 4($fp)
 	li $t1, 4
@@ -493,12 +425,9 @@ carre_constructor:
 	add $t0, $t0, $t1
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
-#here 0
 	lw $t0, 8($fp)
-#here 1
 	lw $t1, 0($sp)
 	addi $sp, $sp, 4
-#here 2
 	sw $t0, 0($t1)
 	addi $sp, $fp, -4
 	lw $ra, 0($sp)
@@ -542,12 +471,9 @@ carre_get_z_super:
 	sw $ra, 0($sp)
 	addi $fp, $sp, 4
 	addi $sp, $sp, 0
-#Start tr_params DCall
 	lw $t0, 4($fp)
 	subi $sp, $sp, 4
 	sw $t0, 0($sp)
-#Start save DCall
-#End save DCall
 	lw $t0, 4($fp)
 	lw $t0, 0($t0)
 	lw $t0, 0($t0)
@@ -555,8 +481,6 @@ carre_get_z_super:
 	add $t0, $t0, $t1
 	lw $t0, 0($t0)
 	jalr $t0
-#Start restore DCall
-#End restore DCall
 	addi $sp, $sp, 4
 	addi $sp, $fp, -4
 	lw $ra, 0($sp)
